@@ -1,0 +1,3530 @@
+
+
+============================================================
+DOSYA: lib\portakal.dart
+============================================================
+
+// Delevop by JeaFriday!
+export 'src/page/home.dart';
+export 'src/page/portakal_material.dart';
+export 'src/theme/color.dart';
+export 'src/theme/icon.dart';
+export 'src/theme/icons.dart';
+export 'src/theme/modal.dart';
+export 'src/theme/theme.dart';
+export 'src/tools/extension.dart';
+export 'src/tools/portakal.dart';
+export 'src/tools/portakal_db.dart';
+export 'src/tools/random.dart';
+export 'src/tools/state_management.dart';
+export 'src/tools/tools.dart';
+export 'src/tools/validator.dart';
+export 'src/tools/window.dart';
+export 'src/widget/checkbox.dart';
+export 'src/widget/gradient_mask.dart';
+export 'src/widget/image.dart';
+export 'src/widget/pressable.dart';
+export 'src/widget/scroller.dart';
+export 'src/tools/snack.dart';
+export 'src/widget/buttons.dart';
+export 'src/widget/state_wrapper.dart';
+export 'src/widget/text.dart';
+export 'src/widget/textfield.dart';
+export 'src/widget/visibility.dart';
+
+
+============================================================
+DOSYA: lib\src\page\home.dart
+============================================================
+
+import 'package:flutter/material.dart';
+import 'package:portakal/src/theme/theme.dart';
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: InkWell(
+              onTap: () {
+                if (PortakalTheme.isDarkMode()) {
+                  PortakalTheme.setLightThemeData();
+                } else {
+                  PortakalTheme.setDarkThemeData();
+                }
+              },
+              child: Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(color: PortakalTheme.defaultColor()),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+============================================================
+DOSYA: lib\src\page\portakal_material.dart
+============================================================
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:portakal/portakal.dart';
+
+class PortakalMaterialApp extends StatelessWidget {
+  final GlobalKey<NavigatorState>? navigatorKey;
+  final GlobalKey<ScaffoldMessengerState>? scaffoldMessengerKey;
+  final Widget? home;
+  final Map<String, Widget Function(BuildContext)> routes;
+  final String? initialRoute;
+  final Route<dynamic>? Function(RouteSettings)? onGenerateRoute;
+  final List<Route<dynamic>> Function(String)? onGenerateInitialRoutes;
+  final Route<dynamic>? Function(RouteSettings)? onUnknownRoute;
+  final bool Function(NavigationNotification)? onNavigationNotification;
+  final List<NavigatorObserver> navigatorObservers;
+  final Widget Function(BuildContext, Widget?)? builder;
+  final String title;
+  final String Function(BuildContext)? onGenerateTitle;
+  final Color? color;
+  final ThemeData? theme;
+  final ThemeData? darkTheme;
+  final ThemeData? highContrastTheme;
+  final ThemeData? highContrastDarkTheme;
+  final ThemeMode? themeMode;
+  final Duration themeAnimationDuration;
+  final Curve themeAnimationCurve;
+  final Locale? locale;
+  final Iterable<LocalizationsDelegate<dynamic>>? localizationsDelegates;
+  final Locale? Function(List<Locale>?, Iterable<Locale>)?
+  localeListResolutionCallback;
+  final Locale? Function(Locale?, Iterable<Locale>)? localeResolutionCallback;
+  final Iterable<Locale> supportedLocales;
+  final bool debugShowMaterialGrid;
+  final bool showPerformanceOverlay;
+  final bool checkerboardRasterCacheImages;
+  final bool developerTools;
+  final bool checkerboardOffscreenLayers;
+  final bool showSemanticsDebugger;
+  final Map<ShortcutActivator, Intent>? shortcuts;
+  final Map<Type, Action<Intent>>? actions;
+  final String? restorationScopeId;
+  final ScrollBehavior? scrollBehavior;
+  final bool useInheritedMediaQuery;
+  final AnimationStyle? themeAnimationStyle;
+
+  const PortakalMaterialApp({
+    super.key,
+    this.navigatorKey,
+    this.scaffoldMessengerKey,
+    this.home,
+    this.routes = const <String, WidgetBuilder>{},
+    this.initialRoute,
+    this.onGenerateRoute,
+    this.onGenerateInitialRoutes,
+    this.onUnknownRoute,
+    this.onNavigationNotification,
+    this.navigatorObservers = const <NavigatorObserver>[],
+    this.builder,
+    this.title = 'Portakal App',
+    this.onGenerateTitle,
+    this.color,
+    this.theme,
+    this.darkTheme,
+    this.highContrastTheme,
+    this.highContrastDarkTheme,
+    this.themeMode = ThemeMode.system,
+    this.themeAnimationDuration = kThemeAnimationDuration,
+    this.themeAnimationCurve = Curves.linear,
+    this.locale,
+    this.localizationsDelegates,
+    this.localeListResolutionCallback,
+    this.localeResolutionCallback,
+    this.supportedLocales = const <Locale>[Locale('en', 'US')],
+    this.debugShowMaterialGrid = false,
+    this.showPerformanceOverlay = false,
+    this.checkerboardRasterCacheImages = false,
+    this.developerTools = true,
+    this.checkerboardOffscreenLayers = false,
+    this.showSemanticsDebugger = false,
+    this.shortcuts,
+    this.actions,
+    this.restorationScopeId,
+    this.scrollBehavior,
+    this.useInheritedMediaQuery = false,
+    this.themeAnimationStyle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return PManagerListener(
+      listenables: [
+        PortakalTheme.theme,
+        PortakalTheme.defaultColor,
+        PortakalTheme.textColor,
+        PortakalTheme.cardColor,
+        PortakalTheme.secondCardColor,
+        PortakalTheme.background,
+      ],
+      childBuilder: () {
+        return MaterialApp(
+          theme: PortakalTheme.getThemeData(),
+          darkTheme: darkTheme,
+          highContrastTheme: highContrastTheme,
+          highContrastDarkTheme: highContrastDarkTheme,
+          themeMode: themeMode,
+          themeAnimationDuration: themeAnimationDuration,
+          themeAnimationCurve: themeAnimationCurve,
+          navigatorKey: navigatorKey,
+          scaffoldMessengerKey: scaffoldMessengerKey,
+          home: Stack(
+            children: [
+              home == null
+                  ? Scaffold(
+                      body: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            h1(context, "🧡"),
+                            SizedBox(height: 10),
+                            h3(
+                              context,
+                              "Hi Developer! You're using the Portakal vehicle. Thanks 🧡🍊",
+                            ),
+                            p(
+                              context,
+                              "Use the 'home:' attribute to begin coding.",
+                            ),
+                            SizedBox(height: 28),
+                            IntrinsicWidth(
+                              child: PortakalButton(
+                                type: PortakalButtonType.duotone,
+                                text: "Go pub.dev🍊",
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : home ?? Container(),
+              if (kDebugMode && developerTools) const _PortakalDevOverlay(),
+            ],
+          ),
+          routes: routes,
+          initialRoute: initialRoute,
+          onGenerateRoute: onGenerateRoute,
+          onGenerateInitialRoutes: onGenerateInitialRoutes,
+          onUnknownRoute: onUnknownRoute,
+          onNavigationNotification: onNavigationNotification,
+          navigatorObservers: navigatorObservers,
+          builder: builder,
+          title: title,
+          onGenerateTitle: onGenerateTitle,
+          color: color,
+          locale: locale,
+          localizationsDelegates: localizationsDelegates,
+          localeListResolutionCallback: localeListResolutionCallback,
+          localeResolutionCallback: localeResolutionCallback,
+          supportedLocales: supportedLocales,
+          debugShowMaterialGrid: debugShowMaterialGrid,
+          showPerformanceOverlay: showPerformanceOverlay,
+          checkerboardRasterCacheImages: checkerboardRasterCacheImages,
+          checkerboardOffscreenLayers: checkerboardOffscreenLayers,
+          showSemanticsDebugger: showSemanticsDebugger,
+          debugShowCheckedModeBanner: false,
+          shortcuts: shortcuts,
+          actions: actions,
+          restorationScopeId: restorationScopeId,
+          scrollBehavior: scrollBehavior,
+          useInheritedMediaQuery: useInheritedMediaQuery,
+          themeAnimationStyle: themeAnimationStyle,
+        );
+      },
+    );
+  }
+}
+
+class _PortakalDevOverlay extends StatefulWidget {
+  const _PortakalDevOverlay();
+
+  @override
+  State<_PortakalDevOverlay> createState() => _PortakalDevOverlayState();
+}
+
+class _PortakalDevOverlayState extends State<_PortakalDevOverlay> {
+  final ValueNotifier<bool> _isExpanded = ValueNotifier(true);
+  final ValueNotifier<Offset> _position = ValueNotifier(const Offset(20, 50));
+
+  @override
+  void initState() {
+    super.initState();
+    _loadState();
+  }
+
+  @override
+  void dispose() {
+    _isExpanded.dispose();
+    _position.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadState() async {
+    final double? x = await PortakalDB.get('portakal_dev_x');
+    final double? y = await PortakalDB.get('portakal_dev_y');
+    final bool? expanded = await PortakalDB.get('portakal_dev_expanded');
+
+    if (x != null && y != null) {
+      _position.value = Offset(x, y);
+    }
+    if (expanded != null) {
+      _isExpanded.value = expanded;
+    }
+  }
+
+  Future<void> _saveState() async {
+    await PortakalDB.save('portakal_dev_x', _position.value.dx);
+    await PortakalDB.save('portakal_dev_y', _position.value.dy);
+    await PortakalDB.save('portakal_dev_expanded', _isExpanded.value);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final theme = Theme.of(context);
+
+    return ValueListenableBuilder<Offset>(
+      valueListenable: _position,
+      builder: (context, currentPosition, _) {
+        return Positioned(
+          left: currentPosition.dx,
+          top: currentPosition.dy,
+          child: GestureDetector(
+            onPanUpdate: (details) {
+              _position.value += details.delta;
+            },
+            onPanEnd: (details) {
+              _saveState();
+            },
+            child: ValueListenableBuilder<bool>(
+              valueListenable: _isExpanded,
+              builder: (context, isExpanded, _) {
+                return Material(
+                  type: MaterialType.transparency,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOutBack,
+                    width: isExpanded ? 240 : 50,
+                    height: isExpanded ? 340 : 50,
+                    decoration: BoxDecoration(
+                      color: PortakalTheme.cardColor().withOpacity(0.95),
+                      borderRadius: BorderRadius.circular(isExpanded ? 20 : 25),
+                      border: Border.all(
+                        color: PortakalTheme.defaultColor(),
+                        width: 1.6,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 10,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(isExpanded ? 18 : 23),
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        layoutBuilder: (currentChild, previousChildren) {
+                          return Stack(
+                            alignment: Alignment.topLeft,
+                            children: [
+                              ...previousChildren,
+                              if (currentChild != null) currentChild,
+                            ],
+                          );
+                        },
+                        child: isExpanded
+                            ? OverflowBox(
+                                key: ValueKey("expanded"),
+                                minWidth: 240,
+                                maxWidth: 240,
+                                minHeight: 340,
+                                maxHeight: 340,
+                                alignment: Alignment.topLeft,
+                                child: SizedBox(
+                                  width: 240,
+                                  height: 340,
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                          vertical: 8,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            h5(context, "Portakal Dev 🧡"),
+                                            InkWell(
+                                              onTap: () {
+                                                _isExpanded.value = false;
+                                                _saveState();
+                                              },
+                                              child: Icon(
+                                                Icons.close_fullscreen_rounded,
+                                                size: 18,
+                                                color:
+                                                    PortakalTheme.textColor(),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Divider(
+                                        color: PortakalTheme.defaultColor(),
+                                        height: 1,
+                                        thickness: 1,
+                                      ),
+                                      Expanded(
+                                        child: SingleChildScrollView(
+                                          padding: const EdgeInsets.all(10),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              _buildInfoRow(
+                                                "Size",
+                                                "${mediaQuery.size.width.toInt()} x ${mediaQuery.size.height.toInt()}",
+                                              ),
+                                              _buildInfoRow(
+                                                "PixelRatio",
+                                                mediaQuery.devicePixelRatio
+                                                    .toStringAsFixed(2),
+                                              ),
+                                              _buildInfoRow(
+                                                "Orientation",
+                                                mediaQuery.orientation.name,
+                                              ),
+                                              _buildInfoRow(
+                                                "Platform",
+                                                defaultTargetPlatform.name,
+                                              ),
+                                              Divider(
+                                                color: PortakalTheme.textColor()
+                                                    .withOpacity(0.2),
+                                              ),
+                                              bold(context, "Safe Area:"),
+                                              _buildInfoRow(
+                                                "Top / Bottom",
+                                                "${mediaQuery.padding.top.toInt()} / ${mediaQuery.padding.bottom.toInt()}",
+                                              ),
+                                              Divider(
+                                                color: PortakalTheme.textColor()
+                                                    .withOpacity(0.2),
+                                              ),
+                                              bold(context, "Theme:"),
+                                              _buildInfoRow(
+                                                "Brightness",
+                                                theme.brightness.name,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : SizedBox(
+                                key: ValueKey("collapsed"),
+                                width: 50,
+                                height: 50,
+                                child: InkWell(
+                                  onTap: () {
+                                    _isExpanded.value = true;
+                                    _saveState();
+                                  },
+                                  borderRadius: BorderRadius.circular(25),
+                                  child: Center(
+                                    child: Text(
+                                      "🍊",
+                                      style: TextStyle(fontSize: 24),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "$label:",
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: PortakalTheme.textColor(),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 12,
+                color: PortakalTheme.textColor().withOpacity(0.8),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+============================================================
+DOSYA: lib\src\theme\color.dart
+============================================================
+
+import 'package:flutter/material.dart';
+
+
+class PortakalColor extends Color {
+  const PortakalColor(super.value);
+
+  factory PortakalColor.fromHex(String hexCode) {
+    String cleanCode = hexCode.toUpperCase().replaceAll("#", "");
+    if (cleanCode.length == 6) {
+      cleanCode = "FF$cleanCode";
+    }
+
+    if (cleanCode.length != 8) {
+      return const PortakalColor(0xFF000000);
+    }
+
+    return PortakalColor(int.parse(cleanCode, radix: 16));
+  }
+
+  factory PortakalColor.fromColor(Color color) {
+    return PortakalColor(color.value);
+  }
+
+  String toHex({bool includeHash = true, bool includeAlpha = true}) {
+    String alpha = value
+        .toRadixString(16)
+        .toUpperCase()
+        .padLeft(8, '0')
+        .substring(0, 2);
+    String hex = value
+        .toRadixString(16)
+        .toUpperCase()
+        .padLeft(8, '0')
+        .substring(2);
+
+    if (!includeAlpha) {
+      return includeHash ? "#$hex" : hex;
+    }
+    return includeHash ? "#$alpha$hex" : "$alpha$hex";
+  }
+
+  PortakalColor wOpacity(double value) {
+    assert(value >= 0.0 && value <= 1.0);
+    return PortakalColor(withOpacity(value).value);
+  }
+
+  PortakalColor darken([double amount = 0.1]) {
+    assert(amount >= 0 && amount <= 1);
+    final hsl = HSLColor.fromColor(this);
+    final hslDark = hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
+    return PortakalColor(hslDark.toColor().value);
+  }
+
+  PortakalColor lighten([double amount = 0.1]) {
+    assert(amount >= 0 && amount <= 1);
+    final hsl = HSLColor.fromColor(this);
+    final hslLight = hsl.withLightness(
+      (hsl.lightness + amount).clamp(0.0, 1.0),
+    );
+    return PortakalColor(hslLight.toColor().value);
+  }
+
+  PortakalColor mix(Color other, [double amount = 0.5]) {
+    return PortakalColor(Color.lerp(this, other, amount)!.value);
+  }
+
+  PortakalColor get complementary {
+    final hsl = HSLColor.fromColor(this);
+    double newHue = (hsl.hue + 180.0) % 360.0;
+    return PortakalColor(hsl.withHue(newHue).toColor().value);
+  }
+
+  Color get contrastText {
+    return computeLuminance() > 0.5 ? Colors.black : Colors.white;
+  }
+
+  MaterialColor toMaterialColor() {
+    return MaterialColor(value, <int, Color>{
+      50: lighten(0.5),
+      100: lighten(0.4),
+      200: lighten(0.3),
+      300: lighten(0.2),
+      400: lighten(0.1),
+      500: this,
+      600: darken(0.1),
+      700: darken(0.2),
+      800: darken(0.3),
+      900: darken(0.4),
+    });
+  }
+}
+
+
+============================================================
+DOSYA: lib\src\theme\icon.dart
+============================================================
+
+import 'package:flutter/material.dart';
+import 'package:portakal/src/theme/icons.dart';
+import 'package:portakal/src/theme/theme.dart';
+
+class PortakalIcon extends StatelessWidget {
+  final PortakalIcons path;
+  final double? size;
+  final Color? color;
+  const PortakalIcon(this.path, {super.key, this.size, this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset(
+      path.path,
+      color: color ?? PortakalTheme.textColor(),
+      width: size ?? 24,
+      height: size ?? 24,
+    );
+  }
+}
+
+
+============================================================
+DOSYA: lib\src\theme\icons.dart
+============================================================
+
+enum PortakalIcons {
+  boldAcornBold('assets/bold/acorn-bold.png'),
+  boldAddressBookBold('assets/bold/address-book-bold.png'),
+  boldAddressBookTabsBold('assets/bold/address-book-tabs-bold.png'),
+  boldAirTrafficControlBold('assets/bold/air-traffic-control-bold.png'),
+  boldAirplaneBold('assets/bold/airplane-bold.png'),
+  boldAirplaneInFlightBold('assets/bold/airplane-in-flight-bold.png'),
+  boldAirplaneLandingBold('assets/bold/airplane-landing-bold.png'),
+  boldAirplaneTakeoffBold('assets/bold/airplane-takeoff-bold.png'),
+  boldAirplaneTaxiingBold('assets/bold/airplane-taxiing-bold.png'),
+  boldAirplaneTiltBold('assets/bold/airplane-tilt-bold.png'),
+  boldAirplayBold('assets/bold/airplay-bold.png'),
+  boldAlarmBold('assets/bold/alarm-bold.png'),
+  boldAlienBold('assets/bold/alien-bold.png'),
+  boldAlignBottomBold('assets/bold/align-bottom-bold.png'),
+  boldAlignBottomSimpleBold('assets/bold/align-bottom-simple-bold.png'),
+  boldAlignCenterHorizontalBold('assets/bold/align-center-horizontal-bold.png'),
+  boldAlignCenterHorizontalSimpleBold('assets/bold/align-center-horizontal-simple-bold.png'),
+  boldAlignCenterVerticalBold('assets/bold/align-center-vertical-bold.png'),
+  boldAlignCenterVerticalSimpleBold('assets/bold/align-center-vertical-simple-bold.png'),
+  boldAlignLeftBold('assets/bold/align-left-bold.png'),
+  boldAlignLeftSimpleBold('assets/bold/align-left-simple-bold.png'),
+  boldAlignRightBold('assets/bold/align-right-bold.png'),
+  boldAlignRightSimpleBold('assets/bold/align-right-simple-bold.png'),
+  boldAlignTopBold('assets/bold/align-top-bold.png'),
+  boldAlignTopSimpleBold('assets/bold/align-top-simple-bold.png'),
+  boldAmazonLogoBold('assets/bold/amazon-logo-bold.png'),
+  boldAmbulanceBold('assets/bold/ambulance-bold.png'),
+  boldAnchorBold('assets/bold/anchor-bold.png'),
+  boldAnchorSimpleBold('assets/bold/anchor-simple-bold.png'),
+  boldAndroidLogoBold('assets/bold/android-logo-bold.png'),
+  boldAngleBold('assets/bold/angle-bold.png'),
+  boldAngularLogoBold('assets/bold/angular-logo-bold.png'),
+  boldApertureBold('assets/bold/aperture-bold.png'),
+  boldAppStoreLogoBold('assets/bold/app-store-logo-bold.png'),
+  boldAppWindowBold('assets/bold/app-window-bold.png'),
+  boldAppleLogoBold('assets/bold/apple-logo-bold.png'),
+  boldApplePodcastsLogoBold('assets/bold/apple-podcasts-logo-bold.png'),
+  boldApproximateEqualsBold('assets/bold/approximate-equals-bold.png'),
+  boldArchiveBold('assets/bold/archive-bold.png'),
+  boldArmchairBold('assets/bold/armchair-bold.png'),
+  boldArrowArcLeftBold('assets/bold/arrow-arc-left-bold.png'),
+  boldArrowArcRightBold('assets/bold/arrow-arc-right-bold.png'),
+  boldArrowBendDoubleUpLeftBold('assets/bold/arrow-bend-double-up-left-bold.png'),
+  boldArrowBendDoubleUpRightBold('assets/bold/arrow-bend-double-up-right-bold.png'),
+  boldArrowBendDownLeftBold('assets/bold/arrow-bend-down-left-bold.png'),
+  boldArrowBendDownRightBold('assets/bold/arrow-bend-down-right-bold.png'),
+  boldArrowBendLeftDownBold('assets/bold/arrow-bend-left-down-bold.png'),
+  boldArrowBendLeftUpBold('assets/bold/arrow-bend-left-up-bold.png'),
+  boldArrowBendRightDownBold('assets/bold/arrow-bend-right-down-bold.png'),
+  boldArrowBendRightUpBold('assets/bold/arrow-bend-right-up-bold.png'),
+  boldArrowBendUpLeftBold('assets/bold/arrow-bend-up-left-bold.png'),
+  boldArrowBendUpRightBold('assets/bold/arrow-bend-up-right-bold.png'),
+  boldArrowCircleDownBold('assets/bold/arrow-circle-down-bold.png'),
+  boldArrowCircleDownLeftBold('assets/bold/arrow-circle-down-left-bold.png'),
+  boldArrowCircleDownRightBold('assets/bold/arrow-circle-down-right-bold.png'),
+  boldArrowCircleLeftBold('assets/bold/arrow-circle-left-bold.png'),
+  boldArrowCircleRightBold('assets/bold/arrow-circle-right-bold.png'),
+  boldArrowCircleUpBold('assets/bold/arrow-circle-up-bold.png'),
+  boldArrowCircleUpLeftBold('assets/bold/arrow-circle-up-left-bold.png'),
+  boldArrowCircleUpRightBold('assets/bold/arrow-circle-up-right-bold.png'),
+  boldArrowClockwiseBold('assets/bold/arrow-clockwise-bold.png'),
+  boldArrowCounterClockwiseBold('assets/bold/arrow-counter-clockwise-bold.png'),
+  boldArrowDownBold('assets/bold/arrow-down-bold.png'),
+  boldArrowDownLeftBold('assets/bold/arrow-down-left-bold.png'),
+  boldArrowDownRightBold('assets/bold/arrow-down-right-bold.png'),
+  boldArrowElbowDownLeftBold('assets/bold/arrow-elbow-down-left-bold.png'),
+  boldArrowElbowDownRightBold('assets/bold/arrow-elbow-down-right-bold.png'),
+  boldArrowElbowLeftBold('assets/bold/arrow-elbow-left-bold.png'),
+  boldArrowElbowLeftDownBold('assets/bold/arrow-elbow-left-down-bold.png'),
+  boldArrowElbowLeftUpBold('assets/bold/arrow-elbow-left-up-bold.png'),
+  boldArrowElbowRightBold('assets/bold/arrow-elbow-right-bold.png'),
+  boldArrowElbowRightDownBold('assets/bold/arrow-elbow-right-down-bold.png'),
+  boldArrowElbowRightUpBold('assets/bold/arrow-elbow-right-up-bold.png'),
+  boldArrowElbowUpLeftBold('assets/bold/arrow-elbow-up-left-bold.png'),
+  boldArrowElbowUpRightBold('assets/bold/arrow-elbow-up-right-bold.png'),
+  boldArrowFatDownBold('assets/bold/arrow-fat-down-bold.png'),
+  boldArrowFatLeftBold('assets/bold/arrow-fat-left-bold.png'),
+  boldArrowFatLineDownBold('assets/bold/arrow-fat-line-down-bold.png'),
+  boldArrowFatLineLeftBold('assets/bold/arrow-fat-line-left-bold.png'),
+  boldArrowFatLineRightBold('assets/bold/arrow-fat-line-right-bold.png'),
+  boldArrowFatLineUpBold('assets/bold/arrow-fat-line-up-bold.png'),
+  boldArrowFatLinesDownBold('assets/bold/arrow-fat-lines-down-bold.png'),
+  boldArrowFatLinesLeftBold('assets/bold/arrow-fat-lines-left-bold.png'),
+  boldArrowFatLinesRightBold('assets/bold/arrow-fat-lines-right-bold.png'),
+  boldArrowFatLinesUpBold('assets/bold/arrow-fat-lines-up-bold.png'),
+  boldArrowFatRightBold('assets/bold/arrow-fat-right-bold.png'),
+  boldArrowFatUpBold('assets/bold/arrow-fat-up-bold.png'),
+  boldArrowLeftBold('assets/bold/arrow-left-bold.png'),
+  boldArrowLineDownBold('assets/bold/arrow-line-down-bold.png'),
+  boldArrowLineDownLeftBold('assets/bold/arrow-line-down-left-bold.png'),
+  boldArrowLineDownRightBold('assets/bold/arrow-line-down-right-bold.png'),
+  boldArrowLineLeftBold('assets/bold/arrow-line-left-bold.png'),
+  boldArrowLineRightBold('assets/bold/arrow-line-right-bold.png'),
+  boldArrowLineUpBold('assets/bold/arrow-line-up-bold.png'),
+  boldArrowLineUpLeftBold('assets/bold/arrow-line-up-left-bold.png'),
+  boldArrowLineUpRightBold('assets/bold/arrow-line-up-right-bold.png'),
+  boldArrowRightBold('assets/bold/arrow-right-bold.png'),
+  boldArrowSquareDownBold('assets/bold/arrow-square-down-bold.png'),
+  boldArrowSquareDownLeftBold('assets/bold/arrow-square-down-left-bold.png'),
+  boldArrowSquareDownRightBold('assets/bold/arrow-square-down-right-bold.png'),
+  boldArrowSquareInBold('assets/bold/arrow-square-in-bold.png'),
+  boldArrowSquareLeftBold('assets/bold/arrow-square-left-bold.png'),
+  boldArrowSquareOutBold('assets/bold/arrow-square-out-bold.png'),
+  boldArrowSquareRightBold('assets/bold/arrow-square-right-bold.png'),
+  boldArrowSquareUpBold('assets/bold/arrow-square-up-bold.png'),
+  boldArrowSquareUpLeftBold('assets/bold/arrow-square-up-left-bold.png'),
+  boldArrowSquareUpRightBold('assets/bold/arrow-square-up-right-bold.png'),
+  boldArrowUDownLeftBold('assets/bold/arrow-u-down-left-bold.png'),
+  boldArrowUDownRightBold('assets/bold/arrow-u-down-right-bold.png'),
+  boldArrowULeftDownBold('assets/bold/arrow-u-left-down-bold.png'),
+  boldArrowULeftUpBold('assets/bold/arrow-u-left-up-bold.png'),
+  boldArrowURightDownBold('assets/bold/arrow-u-right-down-bold.png'),
+  boldArrowURightUpBold('assets/bold/arrow-u-right-up-bold.png'),
+  boldArrowUUpLeftBold('assets/bold/arrow-u-up-left-bold.png'),
+  boldArrowUUpRightBold('assets/bold/arrow-u-up-right-bold.png'),
+  boldArrowUpBold('assets/bold/arrow-up-bold.png'),
+  boldArrowUpLeftBold('assets/bold/arrow-up-left-bold.png'),
+  boldArrowUpRightBold('assets/bold/arrow-up-right-bold.png'),
+  boldArrowsClockwiseBold('assets/bold/arrows-clockwise-bold.png'),
+  boldArrowsCounterClockwiseBold('assets/bold/arrows-counter-clockwise-bold.png'),
+  boldArrowsDownUpBold('assets/bold/arrows-down-up-bold.png'),
+  boldArrowsHorizontalBold('assets/bold/arrows-horizontal-bold.png'),
+  boldArrowsInBold('assets/bold/arrows-in-bold.png'),
+  boldArrowsInCardinalBold('assets/bold/arrows-in-cardinal-bold.png'),
+  boldArrowsInLineHorizontalBold('assets/bold/arrows-in-line-horizontal-bold.png'),
+  boldArrowsInLineVerticalBold('assets/bold/arrows-in-line-vertical-bold.png'),
+  boldArrowsInSimpleBold('assets/bold/arrows-in-simple-bold.png'),
+  boldArrowsLeftRightBold('assets/bold/arrows-left-right-bold.png'),
+  boldArrowsMergeBold('assets/bold/arrows-merge-bold.png'),
+  boldArrowsOutBold('assets/bold/arrows-out-bold.png'),
+  boldArrowsOutCardinalBold('assets/bold/arrows-out-cardinal-bold.png'),
+  boldArrowsOutLineHorizontalBold('assets/bold/arrows-out-line-horizontal-bold.png'),
+  boldArrowsOutLineVerticalBold('assets/bold/arrows-out-line-vertical-bold.png'),
+  boldArrowsOutSimpleBold('assets/bold/arrows-out-simple-bold.png'),
+  boldArrowsSplitBold('assets/bold/arrows-split-bold.png'),
+  boldArrowsVerticalBold('assets/bold/arrows-vertical-bold.png'),
+  boldArticleBold('assets/bold/article-bold.png'),
+  boldArticleMediumBold('assets/bold/article-medium-bold.png'),
+  boldArticleNyTimesBold('assets/bold/article-ny-times-bold.png'),
+  boldAsclepiusBold('assets/bold/asclepius-bold.png'),
+  boldAsteriskBold('assets/bold/asterisk-bold.png'),
+  boldAsteriskSimpleBold('assets/bold/asterisk-simple-bold.png'),
+  boldAtBold('assets/bold/at-bold.png'),
+  boldAtomBold('assets/bold/atom-bold.png'),
+  boldAvocadoBold('assets/bold/avocado-bold.png'),
+  boldAxeBold('assets/bold/axe-bold.png'),
+  boldBabyBold('assets/bold/baby-bold.png'),
+  boldBabyCarriageBold('assets/bold/baby-carriage-bold.png'),
+  boldBackpackBold('assets/bold/backpack-bold.png'),
+  boldBackspaceBold('assets/bold/backspace-bold.png'),
+  boldBagBold('assets/bold/bag-bold.png'),
+  boldBagSimpleBold('assets/bold/bag-simple-bold.png'),
+  boldBalloonBold('assets/bold/balloon-bold.png'),
+  boldBandaidsBold('assets/bold/bandaids-bold.png'),
+  boldBankBold('assets/bold/bank-bold.png'),
+  boldBarbellBold('assets/bold/barbell-bold.png'),
+  boldBarcodeBold('assets/bold/barcode-bold.png'),
+  boldBarnBold('assets/bold/barn-bold.png'),
+  boldBarricadeBold('assets/bold/barricade-bold.png'),
+  boldBaseballBold('assets/bold/baseball-bold.png'),
+  boldBaseballCapBold('assets/bold/baseball-cap-bold.png'),
+  boldBaseballHelmetBold('assets/bold/baseball-helmet-bold.png'),
+  boldBasketBold('assets/bold/basket-bold.png'),
+  boldBasketballBold('assets/bold/basketball-bold.png'),
+  boldBathtubBold('assets/bold/bathtub-bold.png'),
+  boldBatteryChargingBold('assets/bold/battery-charging-bold.png'),
+  boldBatteryChargingVerticalBold('assets/bold/battery-charging-vertical-bold.png'),
+  boldBatteryEmptyBold('assets/bold/battery-empty-bold.png'),
+  boldBatteryFullBold('assets/bold/battery-full-bold.png'),
+  boldBatteryHighBold('assets/bold/battery-high-bold.png'),
+  boldBatteryLowBold('assets/bold/battery-low-bold.png'),
+  boldBatteryMediumBold('assets/bold/battery-medium-bold.png'),
+  boldBatteryPlusBold('assets/bold/battery-plus-bold.png'),
+  boldBatteryPlusVerticalBold('assets/bold/battery-plus-vertical-bold.png'),
+  boldBatteryVerticalEmptyBold('assets/bold/battery-vertical-empty-bold.png'),
+  boldBatteryVerticalFullBold('assets/bold/battery-vertical-full-bold.png'),
+  boldBatteryVerticalHighBold('assets/bold/battery-vertical-high-bold.png'),
+  boldBatteryVerticalLowBold('assets/bold/battery-vertical-low-bold.png'),
+  boldBatteryVerticalMediumBold('assets/bold/battery-vertical-medium-bold.png'),
+  boldBatteryWarningBold('assets/bold/battery-warning-bold.png'),
+  boldBatteryWarningVerticalBold('assets/bold/battery-warning-vertical-bold.png'),
+  boldBeachBallBold('assets/bold/beach-ball-bold.png'),
+  boldBeanieBold('assets/bold/beanie-bold.png'),
+  boldBedBold('assets/bold/bed-bold.png'),
+  boldBeerBottleBold('assets/bold/beer-bottle-bold.png'),
+  boldBeerSteinBold('assets/bold/beer-stein-bold.png'),
+  boldBehanceLogoBold('assets/bold/behance-logo-bold.png'),
+  boldBellBold('assets/bold/bell-bold.png'),
+  boldBellRingingBold('assets/bold/bell-ringing-bold.png'),
+  boldBellSimpleBold('assets/bold/bell-simple-bold.png'),
+  boldBellSimpleRingingBold('assets/bold/bell-simple-ringing-bold.png'),
+  boldBellSimpleSlashBold('assets/bold/bell-simple-slash-bold.png'),
+  boldBellSimpleZBold('assets/bold/bell-simple-z-bold.png'),
+  boldBellSlashBold('assets/bold/bell-slash-bold.png'),
+  boldBellZBold('assets/bold/bell-z-bold.png'),
+  boldBeltBold('assets/bold/belt-bold.png'),
+  boldBezierCurveBold('assets/bold/bezier-curve-bold.png'),
+  boldBicycleBold('assets/bold/bicycle-bold.png'),
+  boldBinaryBold('assets/bold/binary-bold.png'),
+  boldBinocularsBold('assets/bold/binoculars-bold.png'),
+  boldBiohazardBold('assets/bold/biohazard-bold.png'),
+  boldBirdBold('assets/bold/bird-bold.png'),
+  boldBlueprintBold('assets/bold/blueprint-bold.png'),
+  boldBluetoothBold('assets/bold/bluetooth-bold.png'),
+  boldBluetoothConnectedBold('assets/bold/bluetooth-connected-bold.png'),
+  boldBluetoothSlashBold('assets/bold/bluetooth-slash-bold.png'),
+  boldBluetoothXBold('assets/bold/bluetooth-x-bold.png'),
+  boldBoatBold('assets/bold/boat-bold.png'),
+  boldBombBold('assets/bold/bomb-bold.png'),
+  boldBoneBold('assets/bold/bone-bold.png'),
+  boldBookBold('assets/bold/book-bold.png'),
+  boldBookBookmarkBold('assets/bold/book-bookmark-bold.png'),
+  boldBookOpenBold('assets/bold/book-open-bold.png'),
+  boldBookOpenTextBold('assets/bold/book-open-text-bold.png'),
+  boldBookOpenUserBold('assets/bold/book-open-user-bold.png'),
+  boldBookmarkBold('assets/bold/bookmark-bold.png'),
+  boldBookmarkSimpleBold('assets/bold/bookmark-simple-bold.png'),
+  boldBookmarksBold('assets/bold/bookmarks-bold.png'),
+  boldBookmarksSimpleBold('assets/bold/bookmarks-simple-bold.png'),
+  boldBooksBold('assets/bold/books-bold.png'),
+  boldBootBold('assets/bold/boot-bold.png'),
+  boldBoulesBold('assets/bold/boules-bold.png'),
+  boldBoundingBoxBold('assets/bold/bounding-box-bold.png'),
+  boldBowlFoodBold('assets/bold/bowl-food-bold.png'),
+  boldBowlSteamBold('assets/bold/bowl-steam-bold.png'),
+  boldBowlingBallBold('assets/bold/bowling-ball-bold.png'),
+  boldBoxArrowDownBold('assets/bold/box-arrow-down-bold.png'),
+  boldBoxArrowUpBold('assets/bold/box-arrow-up-bold.png'),
+  boldBoxingGloveBold('assets/bold/boxing-glove-bold.png'),
+  boldBracketsAngleBold('assets/bold/brackets-angle-bold.png'),
+  boldBracketsCurlyBold('assets/bold/brackets-curly-bold.png'),
+  boldBracketsRoundBold('assets/bold/brackets-round-bold.png'),
+  boldBracketsSquareBold('assets/bold/brackets-square-bold.png'),
+  boldBrainBold('assets/bold/brain-bold.png'),
+  boldBrandyBold('assets/bold/brandy-bold.png'),
+  boldBreadBold('assets/bold/bread-bold.png'),
+  boldBridgeBold('assets/bold/bridge-bold.png'),
+  boldBriefcaseBold('assets/bold/briefcase-bold.png'),
+  boldBriefcaseMetalBold('assets/bold/briefcase-metal-bold.png'),
+  boldBroadcastBold('assets/bold/broadcast-bold.png'),
+  boldBroomBold('assets/bold/broom-bold.png'),
+  boldBrowserBold('assets/bold/browser-bold.png'),
+  boldBrowsersBold('assets/bold/browsers-bold.png'),
+  boldBugBeetleBold('assets/bold/bug-beetle-bold.png'),
+  boldBugBold('assets/bold/bug-bold.png'),
+  boldBugDroidBold('assets/bold/bug-droid-bold.png'),
+  boldBuildingApartmentBold('assets/bold/building-apartment-bold.png'),
+  boldBuildingBold('assets/bold/building-bold.png'),
+  boldBuildingOfficeBold('assets/bold/building-office-bold.png'),
+  boldBuildingsBold('assets/bold/buildings-bold.png'),
+  boldBulldozerBold('assets/bold/bulldozer-bold.png'),
+  boldBusBold('assets/bold/bus-bold.png'),
+  boldButterflyBold('assets/bold/butterfly-bold.png'),
+  boldCableCarBold('assets/bold/cable-car-bold.png'),
+  boldCactusBold('assets/bold/cactus-bold.png'),
+  boldCakeBold('assets/bold/cake-bold.png'),
+  boldCalculatorBold('assets/bold/calculator-bold.png'),
+  boldCalendarBlankBold('assets/bold/calendar-blank-bold.png'),
+  boldCalendarBold('assets/bold/calendar-bold.png'),
+  boldCalendarCheckBold('assets/bold/calendar-check-bold.png'),
+  boldCalendarDotBold('assets/bold/calendar-dot-bold.png'),
+  boldCalendarDotsBold('assets/bold/calendar-dots-bold.png'),
+  boldCalendarHeartBold('assets/bold/calendar-heart-bold.png'),
+  boldCalendarMinusBold('assets/bold/calendar-minus-bold.png'),
+  boldCalendarPlusBold('assets/bold/calendar-plus-bold.png'),
+  boldCalendarSlashBold('assets/bold/calendar-slash-bold.png'),
+  boldCalendarStarBold('assets/bold/calendar-star-bold.png'),
+  boldCalendarXBold('assets/bold/calendar-x-bold.png'),
+  boldCallBellBold('assets/bold/call-bell-bold.png'),
+  boldCameraBold('assets/bold/camera-bold.png'),
+  boldCameraPlusBold('assets/bold/camera-plus-bold.png'),
+  boldCameraRotateBold('assets/bold/camera-rotate-bold.png'),
+  boldCameraSlashBold('assets/bold/camera-slash-bold.png'),
+  boldCampfireBold('assets/bold/campfire-bold.png'),
+  boldCarBatteryBold('assets/bold/car-battery-bold.png'),
+  boldCarBold('assets/bold/car-bold.png'),
+  boldCarProfileBold('assets/bold/car-profile-bold.png'),
+  boldCarSimpleBold('assets/bold/car-simple-bold.png'),
+  boldCardholderBold('assets/bold/cardholder-bold.png'),
+  boldCardsBold('assets/bold/cards-bold.png'),
+  boldCardsThreeBold('assets/bold/cards-three-bold.png'),
+  boldCaretCircleDoubleDownBold('assets/bold/caret-circle-double-down-bold.png'),
+  boldCaretCircleDoubleLeftBold('assets/bold/caret-circle-double-left-bold.png'),
+  boldCaretCircleDoubleRightBold('assets/bold/caret-circle-double-right-bold.png'),
+  boldCaretCircleDoubleUpBold('assets/bold/caret-circle-double-up-bold.png'),
+  boldCaretCircleDownBold('assets/bold/caret-circle-down-bold.png'),
+  boldCaretCircleLeftBold('assets/bold/caret-circle-left-bold.png'),
+  boldCaretCircleRightBold('assets/bold/caret-circle-right-bold.png'),
+  boldCaretCircleUpBold('assets/bold/caret-circle-up-bold.png'),
+  boldCaretCircleUpDownBold('assets/bold/caret-circle-up-down-bold.png'),
+  boldCaretDoubleDownBold('assets/bold/caret-double-down-bold.png'),
+  boldCaretDoubleLeftBold('assets/bold/caret-double-left-bold.png'),
+  boldCaretDoubleRightBold('assets/bold/caret-double-right-bold.png'),
+  boldCaretDoubleUpBold('assets/bold/caret-double-up-bold.png'),
+  boldCaretDownBold('assets/bold/caret-down-bold.png'),
+  boldCaretLeftBold('assets/bold/caret-left-bold.png'),
+  boldCaretLineDownBold('assets/bold/caret-line-down-bold.png'),
+  boldCaretLineLeftBold('assets/bold/caret-line-left-bold.png'),
+  boldCaretLineRightBold('assets/bold/caret-line-right-bold.png'),
+
+
+... [Bu dosya büyük olduğu için sadece ilk 300 satır yazıldı] ...
+
+
+============================================================
+DOSYA: lib\src\theme\modal.dart
+============================================================
+
+import 'package:flutter/material.dart';
+import 'package:portakal/src/theme/theme.dart';
+
+class PortakalModal {
+  static Future<T?> showBottom<T>(
+    BuildContext context, {
+    required Widget child,
+  }) {
+    return showModalBottomSheet<T>(
+      context: context,
+      backgroundColor: PortakalTheme.cardColor(),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) =>
+          Padding(padding: const EdgeInsets.all(16.0), child: child),
+    );
+  }
+
+  static Future<T?> showPopup<T>(
+    BuildContext context, {
+    required String title,
+    required Widget content,
+    VoidCallback? onConfirm,
+    String confirmText = "Ok",
+  }) {
+    return showDialog<T>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: PortakalTheme.cardColor(),
+        title: Text(title, style: TextStyle(color: PortakalTheme.textColor())),
+        content: content,
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              "Cancel",
+              style: TextStyle(
+                color: PortakalTheme.textColor().withOpacity(0.5),
+              ),
+            ),
+          ),
+          if (onConfirm != null)
+            TextButton(
+              onPressed: () {
+                onConfirm();
+                Navigator.pop(context);
+              },
+              child: Text(
+                confirmText,
+                style: TextStyle(color: PortakalTheme.defaultColor()),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+
+============================================================
+DOSYA: lib\src\theme\theme.dart
+============================================================
+
+import 'package:flutter/material.dart';
+import 'package:portakal/src/tools/state_management.dart';
+
+class PortakalTheme {
+  static PManager<Color> background = PManager(
+    const Color.fromARGB(255, 12, 12, 12),
+  );
+  static PManager<Color> defaultColor = PManager(Colors.orange[800] as Color);
+  static PManager<Color> textColor = PManager(Colors.white);
+  static PManager<Color> cardColor = PManager(
+    const Color.fromARGB(255, 20, 20, 20),
+  );
+  static PManager<Color> secondCardColor = PManager(
+    const Color.fromARGB(255, 26, 26, 26),
+  );
+
+  static ThemeData _createThemeData({required Brightness brightness}) {
+    return ThemeData(
+      useMaterial3: true,
+      brightness: brightness,
+      scaffoldBackgroundColor: background(),
+      canvasColor: background(),
+      cardColor: cardColor(),
+      dividerColor: textColor().withOpacity(0.12),
+      dialogBackgroundColor: cardColor(),
+      indicatorColor: defaultColor(),
+      appBarTheme: AppBarTheme(
+        backgroundColor: background(),
+        foregroundColor: textColor(),
+        elevation: 0,
+        iconTheme: IconThemeData(color: textColor()),
+        actionsIconTheme: IconThemeData(color: textColor()),
+        titleTextStyle: TextStyle(
+          color: textColor(),
+          fontSize: 20,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      iconTheme: IconThemeData(color: textColor()),
+      cardTheme: CardThemeData(
+        color: cardColor(),
+        surfaceTintColor: Colors.transparent,
+        shadowColor: Colors.black.withOpacity(0.2),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: defaultColor(),
+          foregroundColor: textColor(),
+        ),
+      ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: defaultColor(),
+        foregroundColor: textColor(),
+      ),
+      textTheme: TextTheme(
+        displayLarge: TextStyle(color: textColor()),
+        displayMedium: TextStyle(color: textColor()),
+        displaySmall: TextStyle(color: textColor()),
+        headlineLarge: TextStyle(color: textColor()),
+        headlineMedium: TextStyle(color: textColor()),
+        headlineSmall: TextStyle(color: textColor()),
+        titleLarge: TextStyle(color: textColor()),
+        titleMedium: TextStyle(color: textColor()),
+        titleSmall: TextStyle(color: textColor()),
+        bodyLarge: TextStyle(color: textColor()),
+        bodyMedium: TextStyle(color: textColor()),
+        bodySmall: TextStyle(color: textColor()),
+        labelLarge: TextStyle(color: textColor()),
+        labelMedium: TextStyle(color: textColor()),
+        labelSmall: TextStyle(color: textColor()),
+      ),
+      colorScheme: ColorScheme(
+        brightness: brightness,
+        primary: defaultColor(),
+        onPrimary: textColor(),
+        secondary: secondCardColor(),
+        onSecondary: textColor(),
+        error: Colors.red,
+        onError: textColor(),
+        surface: cardColor(),
+        onSurface: textColor(),
+        surfaceContainer: secondCardColor(),
+      ),
+    );
+  }
+
+  static PManager<ThemeData> theme = PManager(
+    _createThemeData(brightness: Brightness.dark),
+  );
+
+  static ThemeData getThemeData() {
+    return theme();
+  }
+
+  static bool isDarkMode() {
+    return theme().brightness == Brightness.dark;
+  }
+
+  static void setDarkThemeData() {
+    background.set(const Color.fromARGB(255, 12, 12, 12));
+    defaultColor.set(Colors.orange[800] as Color);
+    textColor.set(Colors.white);
+    cardColor.set(const Color.fromARGB(255, 20, 20, 20));
+    secondCardColor.set(const Color.fromARGB(255, 26, 26, 26));
+
+    theme.set(_createThemeData(brightness: Brightness.dark));
+
+    theme.up();
+    setUp();
+  }
+
+  static void setLightThemeData() {
+    background.set(const Color.fromARGB(255, 240, 240, 240));
+    defaultColor.set(Colors.orange[800] as Color);
+    textColor.set(Colors.black);
+    cardColor.set(const Color.fromARGB(255, 255, 255, 255));
+    secondCardColor.set(const Color.fromARGB(255, 230, 230, 230));
+
+    theme.set(_createThemeData(brightness: Brightness.light));
+
+    theme.up();
+    setUp();
+  }
+
+  static void setUp() {
+    background.up();
+    defaultColor.up();
+    textColor.up();
+    cardColor.up();
+    secondCardColor.up();
+  }
+}
+
+
+============================================================
+DOSYA: lib\src\tools\extension.dart
+============================================================
+
+import 'package:flutter/material.dart';
+
+extension PortakalContextExtension on BuildContext {
+  double get width => MediaQuery.of(this).size.width;
+  double get height => MediaQuery.of(this).size.height;
+  
+  void hideKeyboard() {
+    FocusScope.of(this).unfocus();
+  }
+
+  bool get isKeyBoardOpen => MediaQuery.of(this).viewInsets.bottom > 0;
+}
+
+extension PortakalStringExtension on String {
+  String capitalize() {
+    if (isEmpty) return this;
+    return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
+  }
+
+  String get removeWhitespace => replaceAll(' ', '');
+}
+
+extension PortakalNumExtension on num {
+  SizedBox get h => SizedBox(height: toDouble());
+  SizedBox get w => SizedBox(width: toDouble());
+}
+
+============================================================
+DOSYA: lib\src\tools\portakal.dart
+============================================================
+
+import 'package:flutter/rendering.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:portakal/src/widget/text.dart';
+
+class Portakal {
+  static Future<void> init({
+    TextStyle Function(TextStyle)? setFontBuilder,
+  }) async {
+    if (setFontBuilder != null) {
+      PortakalFontConfig.setFont(setFontBuilder);
+    }
+
+    await Hive.initFlutter();
+    Hive.openBox("portakal_db");
+    await Hive.openBox("imageCache");
+  }
+}
+
+
+============================================================
+DOSYA: lib\src\tools\portakal_db.dart
+============================================================
+
+import 'package:hive_flutter/hive_flutter.dart';
+
+class PortakalDB {
+  static const String _boxName = 'portakal_db';
+
+  static Future<void> save(String key, dynamic value) async {
+    final box = await Hive.openBox(_boxName);
+    await box.put(key, value);
+  }
+
+  static Future<dynamic> get(String key, {dynamic defaultValue}) async {
+    final box = await Hive.openBox(_boxName);
+    return box.get(key, defaultValue: defaultValue);
+  }
+
+  static Future<void> remove(String key) async {
+    final box = await Hive.openBox(_boxName);
+    await box.delete(key);
+  }
+
+  static Future<void> clear() async {
+    final box = await Hive.openBox(_boxName);
+    await box.clear();
+  }
+}
+
+
+============================================================
+DOSYA: lib\src\tools\random.dart
+============================================================
+
+import 'dart:math';
+
+class PortakalRandom {
+  static String randomWithTime() {
+    var day = DateTime.now().day;
+    var month = DateTime.now().month;
+    var year = DateTime.now().year;
+    var hour = DateTime.now().hour;
+    var minute = DateTime.now().minute;
+    var second = DateTime.now().second;
+    var millisecond = DateTime.now().millisecond;
+
+    return "$day$month$year$hour$minute$second$millisecond";
+  }
+
+  ///Generate a random String value.
+  static String string(int length, {bool includeUppercase = false}) {
+    final List abc = [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f",
+      "g",
+      "h",
+      "i",
+      "j",
+      "k",
+      "l",
+      "m",
+      "n",
+      "o",
+      "p",
+      "r",
+      "s",
+      "t",
+      "u",
+      "v",
+      "y",
+      "x",
+      "w",
+      "z",
+    ];
+    String result = "";
+    for (var i = 0; i < length; i++) {
+      result = result + abc[Random().nextInt(abc.length)];
+    }
+    if (includeUppercase) {
+      result = result.toUpperCase();
+    }
+    return result;
+  }
+
+  ///Generate a random Integer value.
+  static int integer(int length) {
+    if (length <= 0) return 0;
+    if (length == 1) return Random().nextInt(10);
+
+    int min = pow(10, length - 1).toInt();
+    int max = pow(10, length).toInt();
+
+    return min + Random().nextInt(max - min);
+  }
+
+  ///Generate a random Email value.
+  static String email({String? domain}) {
+    return "${string(15)}${domain ?? "@gmail.com"}";
+  }
+
+  ///Generate a random Password value.
+  static String password() {
+    String x = string(3, includeUppercase: true);
+    String x1 = string(2, includeUppercase: true);
+    String x2 = string(1, includeUppercase: true);
+    String x3 = string(3, includeUppercase: true);
+    String x4 = string(2, includeUppercase: true);
+    int x5 = integer(2);
+    int x6 = integer(3);
+    int x7 = integer(1);
+    int x8 = integer(2);
+
+    List<Object> parts = [x, x1, x2, x3, x4, x5, x6, x7, x8];
+    parts.shuffle();
+
+    return parts.join('');
+  }
+}
+
+
+============================================================
+DOSYA: lib\src\tools\run_portakal_app.dart
+============================================================
+
+
+
+============================================================
+DOSYA: lib\src\tools\snack.dart
+============================================================
+
+import 'dart:async';
+
+import 'package:delightful_toast/delight_toast.dart';
+import 'package:flutter/material.dart';
+import 'package:portakal/src/theme/theme.dart';
+
+BuildContext? showSnackSpecial(
+  BuildContext context,
+  IconData icon,
+  String text, {
+  String? actionLabel,
+  Future<void> Function()? onAction,
+}) {
+  if (!context.mounted) return null;
+
+  final overlayContext = Navigator.of(
+    context,
+    rootNavigator: true,
+  ).overlay?.context;
+  if (overlayContext == null) return null;
+
+  final hasAction = actionLabel != null && onAction != null;
+  final title = Text(
+    text,
+    style: TextStyle(color: PortakalTheme.textColor(), fontSize: 13),
+  );
+  WidgetsBinding.instance.scheduleFrame();
+  DelightToastBar(
+    autoDismiss: !hasAction,
+    builder: (ctx) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            width: 300,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            decoration: BoxDecoration(
+              color: PortakalTheme.cardColor(),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: PortakalTheme.secondCardColor(),
+                width: 2,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: PortakalTheme.defaultColor().withOpacity(0.2),
+                  blurRadius: 12,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon, size: 20, color: PortakalTheme.defaultColor()),
+                const SizedBox(width: 10),
+                Expanded(child: title),
+                if (hasAction) ...[
+                  const SizedBox(width: 10),
+                  TextButton(
+                    onPressed: () async {
+                      DelightToastBar.removeAll();
+                      await onAction.call();
+                    },
+                    style: TextButton.styleFrom(
+                      foregroundColor: PortakalTheme.defaultColor(),
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      minimumSize: const Size(0, 34),
+                    ),
+                    child: Text(
+                      actionLabel,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: PortakalTheme.defaultColor(),
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      );
+    },
+  ).show(context);
+  return context;
+}
+
+
+============================================================
+DOSYA: lib\src\tools\state_management.dart
+============================================================
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+
+/// PManager is a custom ChangeNotifier wrapper that allows
+/// getting, setting, and manually notifying listeners of a value.
+class PManager<T> extends ChangeNotifier {
+  /// Creates a PManager instance with an initial value.
+  PManager(this._value);
+
+  T _value;
+
+  /// Returns the current value.
+  T call() => _value;
+
+  /// Sets a new value without notifying listeners.
+  void callSet(T newValue) {
+    if (_value == newValue) return;
+    _value = newValue;
+  }
+
+  /// Sets a new value and notifies all listeners.
+  void set(T newValue) {
+    if (_value == newValue) return;
+    _value = newValue;
+    notifyListeners();
+  }
+
+  /// Manually notifies listeners without changing the value.
+  void up() {
+    notifyListeners();
+  }
+
+  /// Notifies listeners for multiple PManager instances at once.
+  static void multiUp(List<PManager> list) {
+    for (var pm in list) {
+      pm.notifyListeners();
+    }
+  }
+
+  /// Returns a string representation of the object for debugging.
+  @override
+  String toString() => '${describeIdentity(this)}($_value)';
+}
+
+/// A widget that listens to multiple PManager instances and rebuilds
+/// its child when any of them changes.
+class PManagerListener extends StatelessWidget {
+  /// The list of PManager objects to listen to.
+  final List<PManager> listenables;
+
+  /// Builder function that returns the child widget.
+  final Widget Function() childBuilder;
+
+  const PManagerListener({
+    super.key,
+    required this.listenables,
+    required this.childBuilder,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      /// Merges multiple listenables into a single animation.
+      animation: Listenable.merge(listenables),
+      builder: (context, _) => childBuilder(),
+    );
+  }
+}
+
+/// A widget that listens to a single PManager instance and rebuilds
+/// its child when the PManager changes.
+class PManagerListenerSingle extends StatelessWidget {
+  /// The PManager object to listen to.
+  final PManager listenable;
+
+  /// Builder function that returns the child widget.
+  final Widget Function() childBuilder;
+
+  const PManagerListenerSingle({
+    super.key,
+    required this.listenable,
+    required this.childBuilder,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      /// Directly listen to a single PManager without merge overhead
+      animation: listenable,
+      builder: (context, _) => childBuilder(),
+    );
+  }
+}
+
+/// A custom Scaffold that rebuilds its body whenever
+/// the specified PManager listenables change.
+class PManagerScaffold extends StatefulWidget {
+  const PManagerScaffold({
+    super.key,
+    this.appBar,
+    this.floatingActionButton,
+    this.floatingActionButtonLocation,
+    this.floatingActionButtonAnimator,
+    this.persistentFooterButtons,
+    this.persistentFooterAlignment = AlignmentDirectional.centerEnd,
+    this.drawer,
+    this.onDrawerChanged,
+    this.endDrawer,
+    this.onEndDrawerChanged,
+    this.bottomNavigationBar,
+    this.bottomSheet,
+    this.backgroundColor,
+    this.resizeToAvoidBottomInset,
+    this.primary = true,
+    this.drawerDragStartBehavior = DragStartBehavior.start,
+    this.extendBody = false,
+    this.extendBodyBehindAppBar = false,
+    this.drawerScrimColor,
+    this.drawerEdgeDragWidth,
+    this.drawerEnableOpenDragGesture = true,
+    this.endDrawerEnableOpenDragGesture = true,
+    this.restorationId,
+    required this.listenables,
+    required this.body,
+  });
+
+  final PreferredSizeWidget? appBar;
+  final List<PManager<dynamic>> listenables;
+  final Widget? floatingActionButton;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
+  final FloatingActionButtonAnimator? floatingActionButtonAnimator;
+  final List<Widget>? persistentFooterButtons;
+  final AlignmentDirectional persistentFooterAlignment;
+  final Widget? drawer;
+  final DrawerCallback? onDrawerChanged;
+  final Widget? endDrawer;
+  final DrawerCallback? onEndDrawerChanged;
+  final Widget? bottomNavigationBar;
+  final Widget? bottomSheet;
+  final Color? backgroundColor;
+  final bool? resizeToAvoidBottomInset;
+  final bool primary;
+  final DragStartBehavior drawerDragStartBehavior;
+  final bool extendBody;
+  final bool extendBodyBehindAppBar;
+  final Color? drawerScrimColor;
+  final double? drawerEdgeDragWidth;
+  final bool drawerEnableOpenDragGesture;
+  final bool endDrawerEnableOpenDragGesture;
+  final String? restorationId;
+
+  /// Builder function that returns the body widget.
+  final Widget Function() body;
+
+  @override
+  State<PManagerScaffold> createState() => _PManagerScaffoldState();
+}
+
+class _PManagerScaffoldState extends State<PManagerScaffold> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: widget.key,
+      appBar: widget.appBar,
+
+      floatingActionButton: widget.floatingActionButton,
+      floatingActionButtonLocation: widget.floatingActionButtonLocation,
+      floatingActionButtonAnimator: widget.floatingActionButtonAnimator,
+      persistentFooterButtons: widget.persistentFooterButtons,
+      persistentFooterAlignment: widget.persistentFooterAlignment,
+      drawer: widget.drawer,
+      onDrawerChanged: widget.onDrawerChanged,
+      endDrawer: widget.endDrawer,
+      onEndDrawerChanged: widget.onEndDrawerChanged,
+      bottomNavigationBar: widget.bottomNavigationBar,
+      bottomSheet: widget.bottomSheet,
+      backgroundColor: widget.backgroundColor,
+      resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+      primary: widget.primary,
+      drawerDragStartBehavior: widget.drawerDragStartBehavior,
+      extendBody: widget.extendBody,
+      extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
+      drawerScrimColor: widget.drawerScrimColor,
+      drawerEdgeDragWidth: widget.drawerEdgeDragWidth,
+      drawerEnableOpenDragGesture: widget.drawerEnableOpenDragGesture,
+      endDrawerEnableOpenDragGesture: widget.endDrawerEnableOpenDragGesture,
+      restorationId: widget.restorationId,
+
+      /// Body wrapped in a PManagerListener to rebuild on PManager changes.
+      body: PManagerListener(
+        listenables: widget.listenables,
+        childBuilder: widget.body,
+      ),
+    );
+  }
+}
+
+
+============================================================
+DOSYA: lib\src\tools\tools.dart
+============================================================
+
+import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class PortakalTools {
+  static Future<void> copy(String text) async {
+    await Clipboard.setData(ClipboardData(text: text));
+  }
+
+  static Future<String?> paste() async {
+    final ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
+    return data?.text;
+  }
+
+  static Future<void> openURL(String url) async {
+    try {
+      final Uri uri = Uri.parse(url);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri);
+      }
+    } catch (e) {
+      throw Exception("PortakalTools: URL açılamadı -> $e");
+    }
+  }
+}
+
+============================================================
+DOSYA: lib\src\tools\validator.dart
+============================================================
+
+class PortakalValidator {
+  static String? email(String? value, {String? message}) {
+    if (value == null || value.isEmpty) return message ?? 'Email required';
+    final bool emailValid = RegExp(
+      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+    ).hasMatch(value);
+    return emailValid ? null : (message ?? 'Invalid email format');
+  }
+
+  static String? password(String? value, {int minLength = 6, String? message}) {
+    if (value == null || value.isEmpty) return 'Password required';
+    if (value.length < minLength) {
+      return message ??
+          'The password must be at least $minLength in characters.';
+    }
+    return null;
+  }
+
+  static String? required(String? value, {String? message}) {
+    if (value == null || value.isEmpty) {
+      return message ?? 'This field is required';
+    }
+    return null;
+  }
+
+  static String? phone(String? value, {String? message}) {
+    if (value == null || value.isEmpty) return message ?? 'phone required';
+    String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+    RegExp regExp = RegExp(pattern);
+    if (!regExp.hasMatch(value)) {
+      return message ?? 'Invalid phone number';
+    }
+    return null;
+  }
+}
+
+
+============================================================
+DOSYA: lib\src\tools\window.dart
+============================================================
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
+enum PortakalDeviceType {
+  isDesktop("desktop"),
+  isTablet("tablet"),
+  isMobile("mobile");
+
+  final String type;
+  const PortakalDeviceType(this.type);
+}
+
+class PortakalResponsive extends StatelessWidget {
+  final Widget Function(BuildContext context, PortakalDeviceType type) builder;
+
+  const PortakalResponsive({super.key, required this.builder});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        PortakalDeviceType type;
+
+        if (constraints.maxWidth < 600) {
+          type = PortakalDeviceType.isMobile;
+        } else if (constraints.maxWidth < 900) {
+          type = PortakalDeviceType.isTablet;
+        } else {
+          type = PortakalDeviceType.isDesktop;
+        }
+
+        return builder(context, type);
+      },
+    );
+  }
+}
+
+class PortakalWindow {
+  static double width(BuildContext context) =>
+      MediaQuery.of(context).size.width;
+  static double height(BuildContext context) =>
+      MediaQuery.of(context).size.height;
+
+  static void platformFunction({
+    Function()? isWindows,
+    Function()? isMacOS,
+    Function()? isLinux,
+    Function()? isWeb,
+    Function()? isAndroid,
+    Function()? isIOS,
+  }) {
+    if (kIsWeb) {
+      if (isWeb != null) {
+        isWeb();
+      }
+    } else if (defaultTargetPlatform == TargetPlatform.windows) {
+      if (isWindows != null) {
+        isWindows();
+      }
+    } else if (defaultTargetPlatform == TargetPlatform.android) {
+      if (isAndroid != null) {
+        isAndroid();
+      }
+    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+      if (isIOS != null) {
+        isIOS();
+      }
+    } else if (defaultTargetPlatform == TargetPlatform.linux) {
+      if (isLinux != null) {
+        isLinux();
+      }
+    } else if (defaultTargetPlatform == TargetPlatform.macOS) {
+      if (isMacOS != null) {
+        isMacOS();
+      }
+    }
+  }
+
+  static void platformFunctionWithBoolean(
+    Function() func, {
+    bool? isWindows,
+    bool? isMacOS,
+    bool? isLinux,
+    bool? isWeb,
+    bool? isAndroid,
+    bool? isIOS,
+  }) {
+    if (isWeb == true) {
+      func();
+    } else if (isWindows == true) {
+      func();
+    } else if (isAndroid == true) {
+      func();
+    } else if (isIOS == true) {
+      func();
+    } else if (isLinux == true) {
+      func();
+    } else if (isMacOS == true) {
+      func();
+    }
+  }
+
+  static Future<T?> pushFromRightToLeft<T extends Object?>(
+    BuildContext context,
+    Widget route, {
+    Duration? transitionDuration,
+  }) async {
+    return Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder:
+            (
+              BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+            ) {
+              return route;
+            },
+        transitionsBuilder:
+            (
+              BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+              Widget child,
+            ) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(1.0, 0.0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            },
+        transitionDuration: const Duration(milliseconds: 200),
+      ),
+    );
+  }
+
+  static Future<T?> pushFromLeftToRight<T extends Object?>(
+    BuildContext context,
+    Widget route, {
+    Duration? transitionDuration,
+  }) async {
+    return Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder:
+            (
+              BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+            ) {
+              return route;
+            },
+        transitionsBuilder:
+            (
+              BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+              Widget child,
+            ) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(-1.0, 0.0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            },
+        transitionDuration: const Duration(milliseconds: 200),
+      ),
+    );
+  }
+
+  static Future<T?> pushDownFromTop<T extends Object?>(
+    BuildContext context,
+    Widget route, {
+    Duration? transitionDuration,
+  }) async {
+    return Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder:
+            (
+              BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+            ) {
+              return route;
+            },
+        transitionsBuilder:
+            (
+              BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+              Widget child,
+            ) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0.0, -1.0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            },
+        transitionDuration: const Duration(milliseconds: 200),
+      ),
+    );
+  }
+
+  static Future<T?> pushTopFromDown<T extends Object?>(
+    BuildContext context,
+    Widget route, {
+    Duration? transitionDuration,
+  }) async {
+    return Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder:
+            (
+              BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+            ) {
+              return route;
+            },
+        transitionsBuilder:
+            (
+              BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+              Widget child,
+            ) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0.0, 1.0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            },
+        transitionDuration: const Duration(milliseconds: 200),
+      ),
+    );
+  }
+
+  static Future<T?> pushNonAnimated<T extends Object?>(
+    BuildContext context,
+    Widget page,
+  ) {
+    return Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => page,
+        transitionDuration: const Duration(milliseconds: 0),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return child;
+        },
+      ),
+    );
+  }
+
+  static Future<T?> pushFromRightToLeftReplacement<T extends Object?>(
+    BuildContext context,
+    Widget route, {
+    Duration? transitionDuration,
+  }) async {
+    return Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder:
+            (
+              BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+            ) {
+              return route;
+            },
+        transitionsBuilder:
+            (
+              BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+              Widget child,
+            ) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(1.0, 0.0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            },
+        transitionDuration: const Duration(milliseconds: 200),
+      ),
+    );
+  }
+
+  static Future<T?> pushFromLeftToRightReplacement<T extends Object?>(
+    BuildContext context,
+    Widget route, {
+    Duration? transitionDuration,
+  }) async {
+    return Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder:
+            (
+              BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+            ) {
+              return route;
+            },
+        transitionsBuilder:
+            (
+              BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+              Widget child,
+            ) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(-1.0, 0.0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            },
+        transitionDuration: const Duration(milliseconds: 200),
+      ),
+    );
+  }
+
+  static Future<T?> pushDownFromTopReplacement<T extends Object?>(
+    BuildContext context,
+    Widget route, {
+    Duration? transitionDuration,
+  }) async {
+    return Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder:
+            (
+              BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+            ) {
+              return route;
+            },
+        transitionsBuilder:
+            (
+              BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+              Widget child,
+            ) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0.0, -1.0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            },
+        transitionDuration: const Duration(milliseconds: 200),
+      ),
+    );
+  }
+
+  static Future<T?> pushTopFromDownReplacement<T extends Object?>(
+    BuildContext context,
+    Widget route, {
+    Duration? transitionDuration,
+  }) async {
+    return Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder:
+            (
+              BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+            ) {
+              return route;
+            },
+        transitionsBuilder:
+            (
+              BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+              Widget child,
+            ) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0.0, 1.0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            },
+        transitionDuration: const Duration(milliseconds: 200),
+      ),
+    );
+  }
+
+  static Future<T?> pushNonAnimatedReplacement<T extends Object?>(
+    BuildContext context,
+    Widget page,
+  ) {
+    return Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => page,
+        transitionDuration: const Duration(milliseconds: 0),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return child;
+        },
+      ),
+    );
+  }
+
+  static void pop(BuildContext context) {
+    Navigator.pop(context);
+  }
+}
+
+
+============================================================
+DOSYA: lib\src\widget\buttons.dart
+============================================================
+
+
+import 'package:flutter/material.dart';
+import 'package:portakal/src/theme/theme.dart';
+import 'package:portakal/src/widget/pressable.dart';
+import 'package:portakal/src/widget/text.dart';
+
+enum PortakalButtonType {
+  normal(0),
+  border(1),
+  ghost(2),
+  raindrop(3),
+  radiusTop(4),
+  radiusBottom(5),
+  radiusRight(6),
+  duotone(7),
+  radiusLeft(8);
+
+  final int value;
+  const PortakalButtonType(this.value);
+}
+
+class PortakalButton extends StatelessWidget {
+  final PortakalButtonType type;
+  final String text;
+  final Function()? onTap;
+  final Function()? onLongTap;
+  final int? dismissCount;
+  final Widget? child;
+  final Color? backgroundColor;
+  final EdgeInsetsGeometry padding;
+  final Duration cooldown;
+  const PortakalButton({
+    super.key,
+    required this.type,
+    required this.text,
+    this.onTap,
+    this.onLongTap,
+    this.dismissCount,
+    this.cooldown = const Duration(seconds: 1),
+    this.child,
+    this.padding = const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+    this.backgroundColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (PortakalButtonType.normal == type) {
+      return PortakalPressable(
+        cooldown: cooldown,
+        dismissCount: dismissCount,
+        onTap: onTap ?? () {},
+        onLongPress: onLongTap ?? () {},
+        child: Container(
+          padding: padding,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: backgroundColor ?? PortakalTheme.defaultColor(),
+          ),
+          child: Center(child: child ?? bold(context, text)),
+        ),
+      );
+    } else if (PortakalButtonType.border == type) {
+      return PortakalPressable(
+        cooldown: cooldown,
+        dismissCount: dismissCount,
+        onTap: onTap ?? () {},
+        onLongPress: onLongTap ?? () {},
+        child: Container(
+          padding: padding,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: backgroundColor ?? PortakalTheme.defaultColor(),
+              width: 1.4,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Center(child: child ?? bold(context, text)),
+        ),
+      );
+    } else if (PortakalButtonType.duotone == type) {
+      return PortakalPressable(
+        cooldown: cooldown,
+        dismissCount: dismissCount,
+        onTap: onTap ?? () {},
+        onLongPress: onLongTap ?? () {},
+        child: Container(
+          padding: padding,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: backgroundColor ?? PortakalTheme.defaultColor(),
+              width: 1.4,
+            ),
+            borderRadius: BorderRadius.circular(10),
+            color: (backgroundColor ?? PortakalTheme.defaultColor())
+                .withOpacity(0.1),
+          ),
+          child: Center(child: child ?? bold(context, text)),
+        ),
+      );
+    } else if (PortakalButtonType.ghost == type) {
+      return PortakalPressable(
+        cooldown: cooldown,
+        dismissCount: dismissCount,
+        onTap: onTap ?? () {},
+        onLongPress: onLongTap ?? () {},
+        child: Container(
+          padding: padding,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.transparent,
+          ),
+          child: Center(child: child ?? bold(context, text)),
+        ),
+      );
+    } else if (PortakalButtonType.raindrop == type) {
+      return PortakalPressable(
+        cooldown: cooldown,
+        dismissCount: dismissCount,
+        onTap: onTap ?? () {},
+        onLongPress: onLongTap ?? () {},
+        child: Container(
+          padding: padding,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(10),
+              topRight: Radius.circular(10),
+            ),
+            color: backgroundColor ?? PortakalTheme.defaultColor(),
+          ),
+          child: Center(child: child ?? bold(context, text)),
+        ),
+      );
+    } else if (PortakalButtonType.radiusBottom == type) {
+      return PortakalPressable(
+        cooldown: cooldown,
+        dismissCount: dismissCount,
+        onTap: onTap ?? () {},
+        onLongPress: onLongTap ?? () {},
+        child: Container(
+          padding: padding,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10),
+              topRight: Radius.circular(10),
+            ),
+            color: backgroundColor ?? PortakalTheme.defaultColor(),
+          ),
+          child: Center(child: child ?? bold(context, text)),
+        ),
+      );
+    } else if (PortakalButtonType.radiusTop == type) {
+      return PortakalPressable(
+        cooldown: cooldown,
+        dismissCount: dismissCount,
+        onTap: onTap ?? () {},
+        onLongPress: onLongTap ?? () {},
+        child: Container(
+          padding: padding,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10),
+            ),
+            color: backgroundColor ?? PortakalTheme.defaultColor(),
+          ),
+          child: Center(child: child ?? bold(context, text)),
+        ),
+      );
+    } else if (PortakalButtonType.radiusRight == type) {
+      return PortakalPressable(
+        cooldown: cooldown,
+        dismissCount: dismissCount,
+        onTap: onTap ?? () {},
+        onLongPress: onLongTap ?? () {},
+        child: Container(
+          padding: padding,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10),
+              bottomLeft: Radius.circular(10),
+            ),
+            color: backgroundColor ?? PortakalTheme.defaultColor(),
+          ),
+          child: Center(child: child ?? bold(context, text)),
+        ),
+      );
+    } else if (PortakalButtonType.radiusLeft == type) {
+      return PortakalPressable(
+        cooldown: cooldown,
+        dismissCount: dismissCount,
+        onTap: onTap ?? () {},
+        onLongPress: onLongTap ?? () {},
+        child: Container(
+          padding: padding,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(10),
+              bottomRight: Radius.circular(10),
+            ),
+            color: backgroundColor ?? PortakalTheme.defaultColor(),
+          ),
+          child: Center(child: child ?? bold(context, text)),
+        ),
+      );
+    }
+
+    return PortakalPressable(
+      cooldown: cooldown,
+      dismissCount: dismissCount,
+      onTap: onTap ?? () {},
+      onLongPress: onLongTap ?? () {},
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: PortakalTheme.defaultColor(),
+        ),
+        child: Center(child: bold(context, text)),
+      ),
+    );
+  }
+}
+
+
+============================================================
+DOSYA: lib\src\widget\checkbox.dart
+============================================================
+
+import 'package:flutter/material.dart';
+
+class PortakalCheckBox extends StatefulWidget {
+  final void Function(bool) onTap;
+  final void Function(bool)? onLongPress;
+  final double size;
+  final Color? color;
+  final bool? initStatus;
+
+  const PortakalCheckBox({
+    super.key,
+    required this.onTap,
+    required this.size,
+    this.initStatus,
+    this.onLongPress,
+    this.color,
+  });
+
+  @override
+  State<PortakalCheckBox> createState() => _PortakalCheckBoxState();
+}
+
+class _PortakalCheckBoxState extends State<PortakalCheckBox> {
+  late final ValueNotifier<bool> _isCheckedNotifier;
+
+  @override
+  void initState() {
+    super.initState();
+    _isCheckedNotifier = ValueNotifier(widget.initStatus ?? false);
+  }
+
+  @override
+  void dispose() {
+    _isCheckedNotifier.dispose();
+    super.dispose();
+  }
+
+  void _handleTap() {
+    _isCheckedNotifier.value = !_isCheckedNotifier.value;
+    widget.onTap(_isCheckedNotifier.value);
+  }
+
+  void _handleLongPress() {
+    _isCheckedNotifier.value = !_isCheckedNotifier.value;
+    if (widget.onLongPress != null) {
+      widget.onLongPress!(_isCheckedNotifier.value);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<bool>(
+      valueListenable: _isCheckedNotifier,
+      builder: (context, isChecked, child) {
+        return InkWell(
+          borderRadius: BorderRadius.circular(5),
+          onTap: _handleTap,
+          onLongPress: _handleLongPress,
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: widget.color ?? Colors.white,
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            padding: const EdgeInsets.all(2),
+            child: AnimatedOpacity(
+              opacity: isChecked ? 1 : 0,
+              duration: Durations.short1,
+              child: Icon(
+                Icons.check,
+                color: widget.color ?? Colors.white,
+                size: widget.size,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+============================================================
+DOSYA: lib\src\widget\gradient_mask.dart
+============================================================
+
+import 'package:flutter/material.dart';
+
+class PortakalGradientMask extends StatelessWidget {
+  final Widget child;
+  final List<Color> colors;
+  const PortakalGradientMask({super.key, required this.child, required this.colors});
+
+  @override
+  Widget build(BuildContext context) {
+    return ShaderMask(
+      shaderCallback: (bounds) => LinearGradient(
+        colors: colors,
+      ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
+      blendMode: BlendMode.srcIn,
+      child: child,
+    );
+  }
+}
+
+
+============================================================
+DOSYA: lib\src\widget\image.dart
+============================================================
+
+import 'dart:io';
+
+import 'package:http/http.dart' as http;
+import 'dart:typed_data';
+import 'package:flutter/cupertino.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'dart:async';
+import 'package:portakal/src/theme/theme.dart';
+
+class PersistentImageCache {
+  static final Map<String, Uint8List> _memoryCache = {};
+  static final Map<String, Future<Uint8List?>> _inFlight = {};
+  static Box<List<int>>? _box;
+
+  static Future<Box<List<int>>> _ensureBox() async {
+    if (_box != null && _box!.isOpen) return _box!;
+    _box = await Hive.openBox<List<int>>('imageCache');
+    return _box!;
+  }
+
+  static Future<Uint8List?> getBytes(String url) async {
+    if (_memoryCache.containsKey(url)) return _memoryCache[url];
+    final key = url.trim();
+    if (_inFlight[key] != null) return _inFlight[key]!;
+    final future = _loadBytes(key);
+    _inFlight[key] = future;
+    final result = await future;
+    _inFlight.remove(key);
+    return result;
+  }
+
+  static Future<Uint8List?> _loadBytes(String url) async {
+    final box = await _ensureBox();
+    final cachedBytes = box.get(url);
+    if (cachedBytes != null && cachedBytes.isNotEmpty) {
+      final bytes = Uint8List.fromList(cachedBytes);
+      _memoryCache[url] = bytes;
+      return bytes;
+    }
+
+    try {
+      final response = await http
+          .get(Uri.parse(url))
+          .timeout(const Duration(seconds: 8));
+      final bytes = response.bodyBytes;
+      if (response.statusCode == 200 && bytes.isNotEmpty) {
+        _memoryCache[url] = bytes;
+        await box.put(url, bytes);
+        return bytes;
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  static Future<void> prefetch(Iterable<String> urls) async {
+    final tasks = <Future<void>>[];
+    for (final raw in urls) {
+      if (raw.isEmpty || _memoryCache.containsKey(raw)) continue;
+      tasks.add(getBytes(raw).then((_) {}));
+    }
+    await Future.wait(tasks);
+  }
+}
+
+class PersistentImage extends StatefulWidget {
+  final String url;
+  final BoxFit? fit;
+  final double? width;
+  final double? height;
+  final Widget? placeholder;
+  final Widget? errorWidget;
+
+  const PersistentImage(
+    this.url, {
+    super.key,
+    this.fit,
+    this.width,
+    this.height,
+    this.placeholder,
+    this.errorWidget,
+  });
+
+  @override
+  State<PersistentImage> createState() => _PersistentImageState();
+}
+
+class _PersistentImageState extends State<PersistentImage> {
+  final ValueNotifier<Uint8List?> _bytesNotifier = ValueNotifier(null);
+  final ValueNotifier<bool> _errorNotifier = ValueNotifier(false);
+
+  @override
+  void initState() {
+    super.initState();
+    _loadImage();
+  }
+
+  @override
+  void didUpdateWidget(covariant PersistentImage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.url != widget.url) {
+      _bytesNotifier.value = null;
+      _errorNotifier.value = false;
+      _loadImage();
+    }
+  }
+
+  Future<void> _loadImage() async {
+    final bytes = await PersistentImageCache.getBytes(widget.url);
+    if (!mounted) return;
+    if (bytes != null) {
+      _bytesNotifier.value = bytes;
+    } else {
+      _errorNotifier.value = true;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Uint8List?>(
+      valueListenable: _bytesNotifier,
+      builder: (context, bytes, _) {
+        if (bytes != null) {
+          return Image.memory(
+            bytes,
+            width: widget.width,
+            height: widget.height,
+            fit: widget.fit,
+            gaplessPlayback: true,
+          );
+        }
+        return ValueListenableBuilder<bool>(
+          valueListenable: _errorNotifier,
+          builder: (context, error, _) {
+            if (error) {
+              return Image.network(
+                widget.url,
+                width: widget.width,
+                height: widget.height,
+                fit: widget.fit,
+                gaplessPlayback: true,
+                errorBuilder: (context, er, stackTrace) {
+                  return widget.errorWidget ??
+                      Image.asset(
+                        "assets/429.jpg",
+                        width: widget.width,
+                        height: widget.height,
+                        fit: widget.fit,
+                        gaplessPlayback: true,
+                      );
+                },
+              );
+            } else {
+              return widget.placeholder ??
+                  SizedBox(
+                    width: widget.width,
+                    height: widget.height,
+                    child: Center(
+                      child: CupertinoActivityIndicator(
+                        color: PortakalTheme.textColor().withOpacity(0.05),
+                        radius: 10,
+                      ),
+                    ),
+                  );
+            }
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _bytesNotifier.dispose();
+    _errorNotifier.dispose();
+    super.dispose();
+  }
+}
+
+class PortakalImage extends StatelessWidget {
+  final String path;
+  final double? width;
+  final double? height;
+  final BorderRadiusGeometry? borderRadius;
+  final BoxFit? fit;
+  final Widget? errorWidget;
+  final Color? color;
+
+  const PortakalImage({
+    super.key,
+    required this.path,
+    this.width,
+    this.height,
+    this.fit,
+    this.errorWidget,
+    this.color,
+    this.borderRadius,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: borderRadius ?? BorderRadius.zero,
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          if (imageSourceType() == "Network Image") {
+            return PersistentImage(
+              path,
+              width: width,
+              height: height,
+              fit: fit,
+              errorWidget: errorWidget,
+            );
+          } else if (imageSourceType() == "File Image") {
+            return Image.file(
+              File(path),
+              width: width,
+              height: height,
+              fit: fit,
+              gaplessPlayback: true,
+              errorBuilder: (context, error, stackTrace) {
+                return errorWidget ??
+                    SizedBox(
+                      width: width,
+                      height: height,
+                      child: Placeholder(),
+                    );
+              },
+            );
+          } else if (imageSourceType() == "Memory Image") {
+            return Image.memory(
+              UriData.parse(path).contentAsBytes(),
+              width: width,
+              height: height,
+              fit: fit,
+              gaplessPlayback: true,
+              errorBuilder: (context, error, stackTrace) {
+                return errorWidget ??
+                    SizedBox(
+                      width: width,
+                      height: height,
+                      child: Placeholder(),
+                    );
+              },
+            );
+          } else {
+            return Image.asset(
+              path,
+              width: width,
+              height: height,
+              fit: fit,
+              color: color,
+              gaplessPlayback: true,
+              errorBuilder: (context, error, stackTrace) {
+                return errorWidget ??
+                    SizedBox(
+                      width: width,
+                      height: height,
+                      child: Placeholder(),
+                    );
+              },
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  String imageSourceType() {
+    if (path.startsWith("http") || path.startsWith("https")) {
+      return "Network Image";
+    } else if (path.startsWith("file://") ||
+        path.startsWith("/") ||
+        (path.length > 1 && path[1] == ":")) {
+      return "File Image";
+    } else if (path.startsWith("data:")) {
+      return "Memory Image";
+    } else {
+      return "Asset Image";
+    }
+  }
+}
+
+
+============================================================
+DOSYA: lib\src\widget\pressable.dart
+============================================================
+
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:portakal/portakal.dart';
+
+class PortakalPressable extends StatefulWidget {
+  final Widget child;
+  final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
+  final double scale;
+  final Duration duration;
+  final int? dismissCount;
+  final Duration cooldown;
+
+  const PortakalPressable({
+    super.key,
+    required this.child,
+    this.onTap,
+    this.onLongPress,
+    this.scale = 0.94,
+    this.duration = const Duration(milliseconds: 100),
+    this.dismissCount,
+    this.cooldown = const Duration(seconds: 1),
+  });
+
+  @override
+  State<PortakalPressable> createState() => _PortakalPressableState();
+}
+
+class _PortakalPressableState extends State<PortakalPressable> {
+  late final PManager<double> _scaleManager;
+
+  bool _longPressTriggered = false;
+  int _tapCounter = 0;
+  Timer? _resetTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _scaleManager = PManager<double>(1.0);
+  }
+
+  void _animate(bool down) {
+    _scaleManager.set(down ? widget.scale : 1.0);
+  }
+
+  @override
+  void dispose() {
+    _resetTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTapDown: (_) => _animate(true),
+      onTapUp: (_) {
+        if (_longPressTriggered) {
+          _animate(false);
+          _longPressTriggered = false;
+          return;
+        }
+
+        if (widget.dismissCount != null) {
+          _resetTimer?.cancel();
+
+          if (_tapCounter >= widget.dismissCount!) {
+            _resetTimer = Timer(widget.cooldown, () {
+              _tapCounter = 0;
+            });
+            return;
+          }
+
+          _tapCounter++;
+          _resetTimer = Timer(widget.cooldown, () {
+            _tapCounter = 0;
+          });
+        }
+
+        Future.delayed(widget.duration, () {
+          if (mounted) {
+            _animate(false);
+            if (widget.onTap != null) widget.onTap!();
+          }
+        });
+      },
+      onTapCancel: () {
+        _animate(false);
+        _longPressTriggered = false;
+      },
+      onLongPress: widget.onLongPress == null
+          ? null
+          : () {
+              _longPressTriggered = true;
+              if (widget.onLongPress == null) return;
+              widget.onLongPress!();
+            },
+      child: PManagerListenerSingle(
+        listenable: _scaleManager,
+        childBuilder: () {
+          return AnimatedScale(
+            scale: _scaleManager(),
+            duration: widget.duration,
+            curve: Curves.easeInOut,
+            child: widget.child,
+          );
+        },
+      ),
+    );
+  }
+}
+
+
+============================================================
+DOSYA: lib\src\widget\scroller.dart
+============================================================
+
+import 'dart:ui';
+import 'package:flutter/material.dart';
+
+class PortakalScroller extends StatefulWidget {
+  final Axis scrollDirection;
+  final List<Widget> children;
+
+  final bool? reverse;
+  final EdgeInsetsGeometry? padding;
+  final bool? primary;
+  final MainAxisAlignment? mainAxisAlignment;
+  final CrossAxisAlignment? crossAxisAlignment;
+  final ScrollPhysics? physics;
+  final ScrollController? controller;
+  final Clip clipBehavior;
+  final String? restorationId;
+
+  const PortakalScroller({
+    super.key,
+    required this.scrollDirection,
+    required this.children,
+    this.padding,
+    this.primary,
+    this.physics = const BouncingScrollPhysics(),
+    this.controller,
+    this.restorationId,
+    this.mainAxisAlignment,
+    this.crossAxisAlignment,
+    this.reverse = false,
+    this.clipBehavior = Clip.hardEdge,
+  });
+
+  @override
+  State<PortakalScroller> createState() => _PortakalScrollerState();
+}
+
+class _PortakalScrollerState extends State<PortakalScroller> {
+  late ScrollController _localController;
+
+  @override
+  void initState() {
+    super.initState();
+    _localController = widget.controller ?? ScrollController();
+  }
+
+  @override
+  void didUpdateWidget(covariant PortakalScroller oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.controller != oldWidget.controller) {
+      if (oldWidget.controller == null) {
+        _localController.dispose();
+      }
+      _localController = widget.controller ?? ScrollController();
+    }
+  }
+
+  @override
+  void dispose() {
+    if (widget.controller == null) {
+      _localController.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScrollConfiguration(
+      behavior: ScrollConfiguration.of(context).copyWith(
+        dragDevices: {
+          PointerDeviceKind.touch,
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.trackpad,
+          PointerDeviceKind.stylus,
+        },
+      ),
+      child: SingleChildScrollView(
+        controller: _localController,
+        scrollDirection: widget.scrollDirection,
+        reverse: widget.reverse ?? false,
+        padding: widget.padding,
+        primary: widget.primary,
+        physics: widget.physics,
+        restorationId: widget.restorationId,
+        clipBehavior: widget.clipBehavior,
+        child: widget.scrollDirection == Axis.horizontal
+            ? Row(
+                mainAxisAlignment:
+                    widget.mainAxisAlignment ?? MainAxisAlignment.start,
+                crossAxisAlignment:
+                    widget.crossAxisAlignment ?? CrossAxisAlignment.center,
+                children: widget.children,
+              )
+            : Column(
+                mainAxisAlignment:
+                    widget.mainAxisAlignment ?? MainAxisAlignment.start,
+                crossAxisAlignment:
+                    widget.crossAxisAlignment ?? CrossAxisAlignment.center,
+                children: widget.children,
+              ),
+      ),
+    );
+  }
+}
+
+
+============================================================
+DOSYA: lib\src\widget\state_wrapper.dart
+============================================================
+
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:portakal/src/theme/theme.dart';
+
+enum PortakalStateStatus { loading, success, error, empty }
+
+class PortakalStateWrapper extends StatelessWidget {
+  final PortakalStateStatus status;
+  final Widget successWidget;
+  final Widget? loadingWidget;
+  final Widget? errorWidget;
+  final Widget? emptyWidget;
+  final VoidCallback? onRetry;
+  final String? errorMessage;
+
+  const PortakalStateWrapper({
+    super.key,
+    required this.status,
+    required this.successWidget,
+    this.loadingWidget,
+    this.errorWidget,
+    this.emptyWidget,
+    this.onRetry,
+    this.errorMessage,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    switch (status) {
+      case PortakalStateStatus.loading:
+        return Center(
+          child:
+              loadingWidget ??
+              CupertinoActivityIndicator(color: PortakalTheme.defaultColor()),
+        );
+      case PortakalStateStatus.error:
+        return Center(
+          child:
+              errorWidget ??
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.error_outline, size: 48, color: Colors.red),
+                  const SizedBox(height: 10),
+                  Text(
+                    errorMessage ?? "Bir hata oluştu",
+                    style: TextStyle(color: PortakalTheme.textColor()),
+                  ),
+                  if (onRetry != null) ...[
+                    const SizedBox(height: 10),
+                    TextButton(
+                      onPressed: onRetry,
+                      child: Text(
+                        "Tekrar Dene",
+                        style: TextStyle(color: PortakalTheme.defaultColor()),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+        );
+      case PortakalStateStatus.empty:
+        return Center(
+          child:
+              emptyWidget ??
+              Text(
+                "Veri bulunamadı",
+                style: TextStyle(color: PortakalTheme.textColor()),
+              ),
+        );
+      case PortakalStateStatus.success:
+        return successWidget;
+    }
+  }
+}
+
+
+============================================================
+DOSYA: lib\src\widget\text.dart
+============================================================
+
+import 'package:flutter/material.dart';
+import 'package:portakal/src/theme/theme.dart';
+
+Widget h1(BuildContext context, String text, {Color? color}) {
+  return Text(
+    text,
+    style: PortakalFontConfig.apply(
+      TextStyle(
+        color: color ?? PortakalTheme.textColor(),
+        fontWeight: FontWeight.bold,
+        fontSize: 28,
+      ),
+    ),
+  );
+}
+
+Widget h2(
+  BuildContext context,
+  String text, {
+  TextAlign? textAlign,
+  List<Shadow>? shadows,
+}) {
+  return Text(
+    text,
+    textAlign: textAlign,
+    style: PortakalFontConfig.apply(
+      TextStyle(
+        color: PortakalTheme.textColor(),
+        fontWeight: FontWeight.bold,
+        fontSize: 25,
+        shadows: shadows,
+      ),
+    ),
+  );
+}
+
+Widget h3(
+  BuildContext context,
+  String text, {
+  int? maxLines,
+  double? height,
+  TextOverflow? overflow,
+  double? size,
+  Color? color,
+  TextAlign? textAlign,
+  FontWeight? fontWeight,
+}) {
+  return Text(
+    text,
+    maxLines: maxLines,
+    overflow: overflow,
+    textAlign: textAlign,
+    style: PortakalFontConfig.apply(
+      TextStyle(
+        height: height ?? 0.98,
+        color: color ?? PortakalTheme.textColor(),
+        fontWeight: fontWeight ?? FontWeight.bold,
+        fontSize: size ?? 20,
+      ),
+    ),
+  );
+}
+
+Widget h4(BuildContext context, String text) {
+  return Text(
+    text,
+    style: PortakalFontConfig.apply(
+      TextStyle(
+        color: PortakalTheme.textColor(),
+        fontWeight: FontWeight.bold,
+        fontSize: 18,
+      ),
+    ),
+  );
+}
+
+Widget h5(
+  BuildContext context,
+  String text, {
+  int? maxLines,
+  TextOverflow? overflow,
+  double? size,
+  Color? color,
+  TextAlign? textAlign,
+  FontWeight? fontWeight,
+}) {
+  return Text(
+    text,
+    maxLines: maxLines,
+    overflow: overflow,
+    textAlign: textAlign,
+    style: PortakalFontConfig.apply(
+      TextStyle(
+        height: 0.98,
+        color: color ?? PortakalTheme.textColor(),
+        fontWeight: fontWeight ?? FontWeight.bold,
+        fontSize: size ?? 16,
+      ),
+    ),
+  );
+}
+
+Widget p(
+  BuildContext context,
+  String text, {
+  int? maxLines,
+  Color? color,
+  TextOverflow? overflow,
+  TextAlign? textAlign,
+  double? size,
+  TextDecoration? decoration,
+}) {
+  return Text(
+    text,
+    maxLines: maxLines,
+    overflow: overflow,
+    textAlign: textAlign,
+    style: PortakalFontConfig.apply(
+      TextStyle(
+        color: color ?? PortakalTheme.textColor(),
+        fontSize: size ?? 14,
+        decoration: decoration,
+      ),
+    ),
+  );
+}
+
+Widget subP(
+  BuildContext context,
+  String text, {
+  int? maxLines,
+  Color? color,
+  TextOverflow? overflow,
+  double? size,
+  TextAlign? textAlign,
+  FontWeight? fontWeight,
+}) {
+  return Text(
+    text,
+    maxLines: maxLines,
+    overflow: overflow,
+    textAlign: textAlign,
+    style: PortakalFontConfig.apply(
+      TextStyle(
+        color: color ?? PortakalTheme.textColor(),
+        fontSize: size ?? 12,
+        fontWeight: fontWeight,
+      ),
+    ),
+  );
+}
+
+Widget subPName(
+  BuildContext context,
+  String text, {
+  int? maxLines,
+  Color? color,
+  TextOverflow? overflow,
+  double? size,
+  TextAlign? textAlign,
+  FontWeight? fontWeight,
+}) {
+  return Text(
+    text.length > 8 ? text.substring(0, 8) : text,
+    maxLines: maxLines,
+    overflow: overflow,
+    textAlign: textAlign,
+    style: PortakalFontConfig.apply(
+      TextStyle(
+        color: color ?? PortakalTheme.textColor(),
+        fontSize: size ?? 12,
+        fontWeight: fontWeight,
+      ),
+    ),
+  );
+}
+
+Widget bold(
+  BuildContext context,
+  String text, {
+  int? maxLines,
+  TextOverflow? overflow,
+  TextAlign? textAlign,
+  double? size,
+  Color? color,
+}) {
+  return Text(
+    text,
+    maxLines: maxLines,
+    overflow: overflow,
+    textAlign: textAlign,
+    style: PortakalFontConfig.apply(
+      TextStyle(
+        color: color ?? PortakalTheme.textColor(),
+        fontWeight: FontWeight.bold,
+        fontSize: size ?? 14,
+      ),
+    ),
+  );
+}
+
+Widget italic(BuildContext context, String text) {
+  return Text(
+    text,
+    style: PortakalFontConfig.apply(
+      TextStyle(
+        color: PortakalTheme.textColor(),
+        fontStyle: FontStyle.italic,
+        fontSize: 14,
+      ),
+    ),
+  );
+}
+
+class PortakalFontConfig {
+  static TextStyle Function(TextStyle style)? _fontBuilder;
+
+  static void setFont(TextStyle Function(TextStyle style) builder) {
+    _fontBuilder = builder;
+  }
+
+  static TextStyle apply(TextStyle style) {
+    if (_fontBuilder != null) {
+      return _fontBuilder!(style);
+    }
+    return style;
+  }
+}
+
+
+============================================================
+DOSYA: lib\src\widget\textfield.dart
+============================================================
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:portakal/src/theme/icon.dart';
+import 'package:portakal/src/theme/icons.dart';
+import 'package:portakal/src/theme/theme.dart';
+import 'package:portakal/src/widget/pressable.dart';
+
+class PortakalTextField extends StatelessWidget {
+  final String? text;
+  final TextEditingController? textController;
+  final bool? obscureText;
+  final String? imageIcon;
+  final IconData? icon;
+  final IconData? onSucccessIcon;
+  final Function()? onSucccess;
+  final Function()? onTap;
+  final bool? readOnly;
+  final FontWeight? fontWeight;
+  final double? size;
+  final BoxConstraints? constraints;
+  final bool? nonMargin;
+  final List<BoxShadow>? boxShadow;
+  final Color? color;
+  final Color? bgColor;
+  final bool? nonLabel;
+  final List<TextInputFormatter>? inputFormatters;
+  final void Function()? onEditingComplete;
+  final void Function(String)? onChanged;
+  final int? maxLines;
+  final TextInputType? keyboardType;
+  final Widget? suffix;
+
+  const PortakalTextField({
+    super.key,
+    this.text,
+    this.textController,
+    this.obscureText,
+    this.imageIcon,
+    this.icon,
+    this.onSucccessIcon,
+    this.onSucccess,
+    this.onTap,
+    this.readOnly,
+    this.fontWeight,
+    this.size,
+    this.constraints,
+    this.nonMargin,
+    this.boxShadow,
+    this.color,
+    this.bgColor,
+    this.nonLabel,
+    this.inputFormatters,
+    this.onEditingComplete,
+    this.onChanged,
+    this.maxLines = 1,
+    this.keyboardType,
+    this.suffix,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    TextField textFields = TextField(
+      readOnly: readOnly ?? false,
+      controller: textController,
+      inputFormatters: inputFormatters,
+      onEditingComplete: onEditingComplete,
+      maxLines: maxLines,
+      keyboardType: keyboardType,
+      onChanged: onChanged,
+      cursorColor: PortakalTheme.defaultColor(),
+      style: TextStyle(
+        color: color ?? PortakalTheme.textColor(),
+        fontSize: size,
+        fontWeight: fontWeight,
+      ),
+      obscureText: obscureText ?? false,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        labelText: nonLabel != true ? text : null,
+        labelStyle: nonLabel != true
+            ? TextStyle(
+                color: (color ?? PortakalTheme.textColor()).withOpacity(0.5),
+              )
+            : null,
+        hintText: nonLabel == true ? text : null,
+        hintStyle: nonLabel == true
+            ? TextStyle(
+                color: (color ?? PortakalTheme.textColor()).withOpacity(0.5),
+                fontSize: size,
+                fontWeight: fontWeight,
+              )
+            : null,
+        isDense: true,
+      ),
+    );
+
+    return Container(
+      padding: const EdgeInsets.all(8),
+      constraints: constraints,
+      margin: nonMargin == true
+          ? null
+          : const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        boxShadow: boxShadow,
+        borderRadius: BorderRadius.circular(5),
+        color: bgColor ?? Colors.transparent,
+      ),
+      child: Stack(
+        children: [
+          Row(
+            children: [
+              Visibility(
+                visible: imageIcon != null,
+                child: Row(
+                  children: [
+                    Image.asset(
+                      imageIcon ?? "",
+                      color: PortakalTheme.defaultColor(),
+                      width: 20,
+                      height: 20,
+                    ),
+                    const SizedBox(width: 12),
+                  ],
+                ),
+              ),
+              Visibility(
+                visible: icon != null,
+                child: Row(
+                  children: [
+                    Icon(
+                      icon ?? Icons.search,
+                      color: PortakalTheme.defaultColor(),
+                      size: 20,
+                    ),
+                    const SizedBox(width: 12),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: onTap != null
+                    ? PortakalPressable(
+                        onTap: onTap,
+                        child: AbsorbPointer(child: textFields),
+                      )
+                    : textFields,
+              ),
+              if (suffix != null) ...[const SizedBox(width: 8), suffix!],
+              Visibility(
+                visible: onSucccess != null,
+                child: Row(
+                  children: const [
+                    SizedBox(width: 12),
+                    SizedBox(width: 20, height: 20),
+                    SizedBox(width: 6),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Positioned(
+            right: 6,
+            top: 14,
+            child: Visibility(
+              visible: onSucccess != null,
+              child: PortakalPressable(
+                onTap: () {
+                  if (onSucccess != null) {
+                    onSucccess!();
+                  }
+                },
+                child: onSucccessIcon != null
+                    ? Icon(
+                        onSucccessIcon,
+                        size: 22,
+                        color: PortakalTheme.textColor(),
+                      )
+                    : PortakalIcon(
+                        PortakalIcons.boldPaperPlaneRightBold,
+                        size: 22,
+                        color: PortakalTheme.defaultColor(),
+                      ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+============================================================
+DOSYA: lib\src\widget\visibility.dart
+============================================================
+
+import 'package:flutter/material.dart';
+
+class AnimatedVisibility extends StatelessWidget {
+  final bool visible;
+  final Widget child;
+  final Duration duration;
+  final Curve curve;
+
+  const AnimatedVisibility({
+    super.key,
+    required this.visible,
+    required this.child,
+    this.duration = const Duration(milliseconds: 300),
+    this.curve = Curves.easeInOut,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: duration,
+      switchInCurve: curve,
+      switchOutCurve: curve,
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
+      child: visible
+          ? KeyedSubtree(
+              key: const ValueKey('visible'),
+              child: child,
+            )
+          : const SizedBox(key: ValueKey('invisible')),
+    );
+  }
+}
