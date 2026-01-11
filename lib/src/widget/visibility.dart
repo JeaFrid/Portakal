@@ -21,16 +21,10 @@ class AnimatedVisibility extends StatelessWidget {
       switchInCurve: curve,
       switchOutCurve: curve,
       transitionBuilder: (Widget child, Animation<double> animation) {
-        return FadeTransition(
-          opacity: animation,
-          child: child,
-        );
+        return FadeTransition(opacity: animation, child: child);
       },
       child: visible
-          ? KeyedSubtree(
-              key: const ValueKey('visible'),
-              child: child,
-            )
+          ? KeyedSubtree(key: const ValueKey('visible'), child: child)
           : const SizedBox(key: ValueKey('invisible')),
     );
   }

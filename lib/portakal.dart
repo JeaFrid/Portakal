@@ -1,5 +1,4 @@
 // Delevop by JeaFriday!
-export 'src/page/home.dart';
 export 'src/page/portakal_material.dart';
 export 'src/theme/color.dart';
 export 'src/theme/icon.dart';
