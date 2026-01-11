@@ -1,6 +1,6 @@
 name: portakal
 description: Portakal allows you to shorten long code by adding a layer on top of Flutter!
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/JeaFrid/portakal
 repository: https://github.com/JeaFrid/portakal
 issue_tracker: https://github.com/JeaFrid/portakal/issues

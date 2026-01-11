@@ -20,6 +20,16 @@ Portakal is a comprehensive Flutter toolkit designed to accelerate development. 
 
 ---
 
+## Portakal CLI 🍊
+
+Portakal is a powerful CLI (Command Line Interface) automation tool that allows you to start your Flutter projects beyond standard defaults, with a "freshly squeezed" and ready-to-use structure.
+
+Leave the tedious tasks to Portakal and enjoy coding! 🧡
+
+https://github.com/JeaFrid/Portakal-Manipulation
+
+---
+
 ## 📦 Installation
 
 Add `portakal` to your `pubspec.yaml`:
