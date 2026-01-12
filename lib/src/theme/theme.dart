@@ -1,18 +1,116 @@
 import 'package:flutter/material.dart';
 import 'package:portakal/src/tools/state_management.dart';
 
+class _PortakalThemeColors {
+  Color backgroundLight = const Color.fromARGB(255, 240, 240, 240);
+  Color defaultColorLight = Colors.orange[800] as Color;
+  Color textColorLight = Colors.black;
+  Color cardColorLight = const Color.fromARGB(255, 255, 255, 255);
+  Color secondCardColorLight = Color.fromARGB(255, 230, 230, 230);
+
+  Color backgroundDark = const Color.fromARGB(255, 12, 12, 12);
+  Color defaultColorDark = Colors.orange[800] as Color;
+  Color textColorDark = Colors.white;
+  Color cardColorDark = const Color.fromARGB(255, 20, 20, 20);
+  Color secondCardColorDark = const Color.fromARGB(255, 26, 26, 26);
+
+  void setLight(
+    Color setBackground,
+    Color setDefaultColor,
+    Color setTextColor,
+    Color setCardColor,
+    Color setSecondCardColor,
+  ) {
+    backgroundLight = setBackground;
+    defaultColorLight = setDefaultColor;
+    textColorLight = setTextColor;
+    cardColorLight = setCardColor;
+    secondCardColorLight = setSecondCardColor;
+  }
+
+  void setDark(
+    Color setBackground,
+    Color setDefaultColor,
+    Color setTextColor,
+    Color setCardColor,
+    Color setSecondCardColor,
+  ) {
+    backgroundDark = setBackground;
+    defaultColorDark = setDefaultColor;
+    textColorDark = setTextColor;
+    cardColorDark = setCardColor;
+    secondCardColorDark = setSecondCardColor;
+  }
+}
+
+class PortakalThemeData {
+  final Color background;
+  final Color defaultColor;
+  final Color textColor;
+  final Color cardColor;
+  final Color secondCardColor;
+  PortakalThemeData({
+    required this.background,
+    required this.defaultColor,
+    required this.textColor,
+    required this.cardColor,
+    required this.secondCardColor,
+  });
+}
+
 class PortakalTheme {
-  static PManager<Color> background = PManager(
-    const Color.fromARGB(255, 12, 12, 12),
-  );
-  static PManager<Color> defaultColor = PManager(Colors.orange[800] as Color);
-  static PManager<Color> textColor = PManager(Colors.white);
-  static PManager<Color> cardColor = PManager(
-    const Color.fromARGB(255, 20, 20, 20),
-  );
-  static PManager<Color> secondCardColor = PManager(
-    const Color.fromARGB(255, 26, 26, 26),
-  );
+  static final _PortakalThemeColors _c = _PortakalThemeColors();
+
+  static PManager<Color> background = PManager(_c.backgroundDark);
+  static PManager<Color> defaultColor = PManager(_c.defaultColorDark);
+  static PManager<Color> textColor = PManager(_c.textColorDark);
+  static PManager<Color> cardColor = PManager(_c.cardColorDark);
+  static PManager<Color> secondCardColor = PManager(_c.secondCardColorDark);
+
+  static void setDarkThemeData({
+    Color? setBackgroundColor,
+    Color? setTextColor,
+    Color? setDefaultColor,
+    Color? setCardColor,
+    Color? setSecondCardColor,
+  }) {
+    background.set(setBackgroundColor ?? _c.backgroundDark);
+    defaultColor.set(setDefaultColor ?? _c.defaultColorDark);
+    textColor.set(setTextColor ?? _c.textColorDark);
+    cardColor.set(setCardColor ?? _c.cardColorDark);
+    secondCardColor.set(setSecondCardColor ?? _c.secondCardColorDark);
+
+    theme.set(_createThemeData(brightness: Brightness.dark));
+
+    theme.up();
+    setUp();
+  }
+
+  static void setLightThemeData({
+    Color? setBackgroundColor,
+    Color? setTextColor,
+    Color? setDefaultColor,
+    Color? setCardColor,
+    Color? setSecondCardColor,
+  }) {
+    background.set(setBackgroundColor ?? _c.backgroundLight);
+    defaultColor.set(setDefaultColor ?? _c.defaultColorLight);
+    textColor.set(setTextColor ?? _c.textColorLight);
+    cardColor.set(setCardColor ?? _c.cardColorLight);
+    secondCardColor.set(setSecondCardColor ?? _c.secondCardColorLight);
+    theme.set(_createThemeData(brightness: Brightness.light));
+
+    theme.up();
+    setUp();
+  }
+
+  static void setUp() {
+    background.up();
+    defaultColor.up();
+    textColor.up();
+    cardColor.up();
+    secondCardColor.up();
+  }
 
   static ThemeData _createThemeData({required Brightness brightness}) {
     return ThemeData(
@@ -95,38 +193,10 @@ class PortakalTheme {
   static bool isDarkMode() {
     return theme().brightness == Brightness.dark;
   }
-
-  static void setDarkThemeData() {
-    background.set(const Color.fromARGB(255, 12, 12, 12));
-    defaultColor.set(Colors.orange[800] as Color);
-    textColor.set(Colors.white);
-    cardColor.set(const Color.fromARGB(255, 20, 20, 20));
-    secondCardColor.set(const Color.fromARGB(255, 26, 26, 26));
-
-    theme.set(_createThemeData(brightness: Brightness.dark));
-
-    theme.up();
-    setUp();
-  }
-
-  static void setLightThemeData() {
-    background.set(const Color.fromARGB(255, 240, 240, 240));
-    defaultColor.set(Colors.orange[800] as Color);
-    textColor.set(Colors.black);
-    cardColor.set(const Color.fromARGB(255, 255, 255, 255));
-    secondCardColor.set(const Color.fromARGB(255, 230, 230, 230));
-
-    theme.set(_createThemeData(brightness: Brightness.light));
-
-    theme.up();
-    setUp();
-  }
-
-  static void setUp() {
-    background.up();
-    defaultColor.up();
-    textColor.up();
-    cardColor.up();
-    secondCardColor.up();
-  }
 }
+
+Color get background => PortakalTheme.background();
+Color get defaultColor => PortakalTheme.defaultColor();
+Color get textColor => PortakalTheme.textColor();
+Color get cardColor => PortakalTheme.cardColor();
+Color get secondCardColor => PortakalTheme.secondCardColor();

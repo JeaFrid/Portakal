@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:portakal/src/theme/theme.dart';
 
-Widget h1(BuildContext context, String text, {Color? color}) {
+Text h1(BuildContext context, String text, {Color? color}) {
   return Text(
     text,
     style: PortakalFontConfig.apply(
@@ -14,7 +14,7 @@ Widget h1(BuildContext context, String text, {Color? color}) {
   );
 }
 
-Widget h2(
+Text h2(
   BuildContext context,
   String text, {
   TextAlign? textAlign,
@@ -34,7 +34,7 @@ Widget h2(
   );
 }
 
-Widget h3(
+Text h3(
   BuildContext context,
   String text, {
   int? maxLines,
@@ -61,7 +61,7 @@ Widget h3(
   );
 }
 
-Widget h4(BuildContext context, String text) {
+Text h4(BuildContext context, String text) {
   return Text(
     text,
     style: PortakalFontConfig.apply(
@@ -74,7 +74,7 @@ Widget h4(BuildContext context, String text) {
   );
 }
 
-Widget h5(
+Text h5(
   BuildContext context,
   String text, {
   int? maxLines,
@@ -100,7 +100,7 @@ Widget h5(
   );
 }
 
-Widget p(
+Text p(
   BuildContext context,
   String text, {
   int? maxLines,
@@ -125,7 +125,7 @@ Widget p(
   );
 }
 
-Widget subP(
+Text subP(
   BuildContext context,
   String text, {
   int? maxLines,
@@ -150,7 +150,7 @@ Widget subP(
   );
 }
 
-Widget subPName(
+Text subPName(
   BuildContext context,
   String text, {
   int? maxLines,
@@ -175,7 +175,7 @@ Widget subPName(
   );
 }
 
-Widget bold(
+Text bold(
   BuildContext context,
   String text, {
   int? maxLines,
@@ -199,7 +199,7 @@ Widget bold(
   );
 }
 
-Widget italic(BuildContext context, String text) {
+Text italic(BuildContext context, String text) {
   return Text(
     text,
     style: PortakalFontConfig.apply(
